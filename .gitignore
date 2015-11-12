@@ -1,3 +1,12 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+WS_Client_Loyalty/logdir/*.log*
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
