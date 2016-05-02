@@ -292,7 +292,7 @@ public class Loyalty{
 				}
 			}
 			
-			if(stopProgramma) {
+			if(stopProgramma){
 				break;
 			}
 			
@@ -626,9 +626,10 @@ public class Loyalty{
 			movma.setVcoda(posArt);
 			movma.setVdesc(posArt);
 		}
+		log.info("articolo: " + movma.getVcoda());
 		
 		Boolean eUnBuono = false;
-		if(StringUtils.equals(movma.getVcoda(), "/SCOCARD")) {
+		if(StringUtils.equals(StringUtils.trimToEmpty(movma.getVcoda()), "/SCOCARD")) {
 			eUnBuono = true;
 		}
 		
@@ -637,7 +638,12 @@ public class Loyalty{
 		
 		if(!(eUnBuono || eUnPosArt)) { // deve essere un articolo reale (ne buono e nemmeno posArt)
 			anmag = asAnmag0fDao.getArticoloDaMcoda(movma.getVcoda());
-			aafor = asAafor0fDao.getArticoloDaAaforAacoa(anmag.getMcofo(), anmag.getMcoaf());
+			if(anmag == null){
+				log.warn(movma.getVcoda() + " non presente o annullato in Anmag0f");
+				aafor = null;
+			}else{
+				aafor = asAafor0fDao.getArticoloDaAaforAacoa(anmag.getMcofo(), anmag.getMcoaf());
+			}
 			// in caso non trovassi l'articolo in AsAafor0f
 			if(aafor == null){
 				log.warn(anmag + " non presente in Aafor0f");
@@ -673,12 +679,16 @@ public class Loyalty{
 		dettaglioScontrino.setCategoriaMerceologica(aafor.getAasfa() + "-" + movma.getVcoda());
 		dettaglioScontrino.setCodiceBrand(aafor.getId().getAafor().toString());
 		if(eUnBuono) {
-			JAXBElement<String> buono = factory.createDettaglioScontrinoCodiceBuono(movma.getVdesc());
+			String codiceBuono = movma.getVdesc();
+			// il codice del buono e' scritto nelle ultime 13 cifre
+			codiceBuono = StringUtils.substring(StringUtils.trim(codiceBuono), -13);
+			JAXBElement<String> buono = factory.createDettaglioScontrinoCodiceBuono(codiceBuono);
 			dettaglioScontrino.setCodiceBuono(buono);
 		}
-		// JAXBElement<String> codiceEan = factory.createDettaglioScontrinoCodiceEAN("1234567890123");
-		// dettaglioScontrino.setCodiceEAN(codiceEan);
-		dettaglioScontrino.setCodiceProdotto(aafor.getId().getAacoa());
+		JAXBElement<String> codiceEan = factory.createDettaglioScontrinoCodiceEAN(StringUtils.trimToEmpty(aafor.getAaean()));
+		dettaglioScontrino.setCodiceEAN(codiceEan);
+		// dettaglioScontrino.setCodiceProdotto(aafor.getId().getAacoa());
+		dettaglioScontrino.setCodiceProdotto(StringUtils.trimToEmpty(aafor.getAacex()));
 		dettaglioScontrino.setCodiceProdottoPdv(movma.getVcoda());
 		
 		JAXBElement<String> descrizioneProdotto = factory.createDettaglioScontrinoDescrizioneProdotto(movma.getVdesc() + "-" + movma.getVcoda());
@@ -742,6 +752,5 @@ public class Loyalty{
 		decimalFormatPrezzo.setRoundingMode(RoundingMode.HALF_UP);
 		String fToStr = decimalFormatPrezzo.format(f);
 		return fToStr;
-		
 	}
 }

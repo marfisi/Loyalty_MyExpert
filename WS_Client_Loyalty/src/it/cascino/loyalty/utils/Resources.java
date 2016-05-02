@@ -30,6 +30,7 @@ public class Resources{
 		utxAs = emAs.getTransaction();
 	}
 	
+	@SuppressWarnings("unused")
 	private void initPg(){
 		emfPg = Persistence.createEntityManagerFactory("Postgresql");
 		emPg = emfPg.createEntityManager();

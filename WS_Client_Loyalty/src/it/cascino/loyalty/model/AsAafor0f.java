@@ -29,18 +29,22 @@ public class AsAafor0f implements Serializable{
 	private String aades;
 	private String aasfa;
 	private String aamod;
+	private String aacex;
+	private String aaean;
 	
 	public AsAafor0f(){
 		this.id = new AsAafor0fPKey();
 	}
 
-	public AsAafor0f(AsAafor0fPKey id, String aamar, String aades, String aasfa, String aamod, String toString, boolean equals, Object obj){
+	public AsAafor0f(AsAafor0fPKey id, String aamar, String aades, String aasfa, String aamod, String aacex, String aaean){
 		super();
 		this.id = id;
 		this.aamar = aamar;
 		this.aades = aades;
 		this.aasfa = aasfa;
 		this.aamod = aamod;
+		this.aacex = aacex;
+		this.aaean = aaean;
 	}
 
 	public AsAafor0fPKey getId(){
@@ -82,6 +86,22 @@ public class AsAafor0f implements Serializable{
 	public void setAamod(String aamod){
 		this.aamod = aamod;
 	}
+	
+	public String getAacex(){
+		return aacex;
+	}
+
+	public void setAacex(String aacex){
+		this.aacex = aacex;
+	}
+
+	public String getAaean(){
+		return aaean;
+	}
+
+	public void setAaean(String aaean){
+		this.aaean = aaean;
+	}
 
 	@Override
 	public int hashCode(){
@@ -92,6 +112,8 @@ public class AsAafor0f implements Serializable{
 		result = prime * result + ((aamar == null) ? 0 : aamar.hashCode());
 		result = prime * result + ((aamod == null) ? 0 : aamod.hashCode());
 		result = prime * result + ((aasfa == null) ? 0 : aasfa.hashCode());
+		result = prime * result + ((aacex == null) ? 0 : aacex.hashCode());
+		result = prime * result + ((aaean == null) ? 0 : aaean.hashCode());
 		return result;
 	}
 	
@@ -116,7 +138,9 @@ public class AsAafor0f implements Serializable{
 		stringBuilder.append("aamar=" + StringUtils.trim(aamar)).append(", ");
 		stringBuilder.append("aades=" + StringUtils.trim(aades)).append(", ");
 		stringBuilder.append("aasfa=" + StringUtils.trim(aasfa)).append(", ");
-		stringBuilder.append("aamod=" + StringUtils.trim(aamod));
+		stringBuilder.append("aamod=" + StringUtils.trim(aamod)).append(", ");
+		stringBuilder.append("aasfa=" + StringUtils.trim(aacex)).append(", ");
+		stringBuilder.append("aamod=" + StringUtils.trim(aaean));
 		stringBuilder.append("]");
 		return stringBuilder.toString();
 	}

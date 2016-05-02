@@ -1,11 +1,11 @@
 package it.cascino.loyalty.managmentbean;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
+//import java.rmi.RemoteException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.inject.Named;
-import org.apache.axis.AxisFault;
+//import javax.inject.Named;
+//import org.apache.axis.AxisFault;
 //import org.datacontract.schemas._2004._07.Expert_Loyalty_WS_DTO.DatiClient;
 //import org.tempuri.BasicHttpBinding_ILoyaltyIntegrationStub;
 //import org.tempuri.LoyaltyIntegration;
