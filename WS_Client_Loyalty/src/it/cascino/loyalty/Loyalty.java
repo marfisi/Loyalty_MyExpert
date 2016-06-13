@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.expert_loyalty_domain.ArrayOfTaglioBuono;
@@ -143,7 +144,10 @@ public class Loyalty{
 			log.fatal("Error: " + ioe.getMessage());
 		}
 		
-		connectWebService(ambiente);
+		if(!(connectWebService(ambiente))){
+			log.fatal("Errore connessione");
+			return;
+		}
 		
 		Integer frequenza = 2000;
 		Boolean stopProgramma = false;
@@ -312,26 +316,34 @@ public class Loyalty{
 		log.info("]" + "Loyalty");
 	}
 	
-	private void connectWebService(String amb){
+	private Boolean connectWebService(String amb){
 		log.info("[" + "connectWebService");
 		
-		HeaderHandlerResolver handlerResolver = new HeaderHandlerResolver(context, indIP, password, signature, username); // new HeaderHandlerResolver();
-		
-		if(StringUtils.equals(amb, "P")){
-			LoyaltyIntegrationProduzione service = new LoyaltyIntegrationProduzione();
-			service.setHandlerResolver(handlerResolver);
-			servicePort = service.getBasicHttpBindingILoyaltyIntegration();
-		}else if(StringUtils.equals(amb, "T")){
-			LoyaltyIntegrationTest service = new LoyaltyIntegrationTest();
-			service.setHandlerResolver(handlerResolver);
-			servicePort = service.getBasicHttpBindingILoyaltyIntegration();
-		}else{
-			log.fatal("ambiente " + amb + " non consentito");
-			return;
+		try{
+			HeaderHandlerResolver handlerResolver = new HeaderHandlerResolver(context, indIP, password, signature, username); // new HeaderHandlerResolver();
+			
+			if(StringUtils.equals(amb, "P")){
+				LoyaltyIntegrationProduzione service = new LoyaltyIntegrationProduzione();
+				service.setHandlerResolver(handlerResolver);
+				servicePort = service.getBasicHttpBindingILoyaltyIntegration();
+			}else if(StringUtils.equals(amb, "T")){
+				LoyaltyIntegrationTest service = new LoyaltyIntegrationTest();
+				service.setHandlerResolver(handlerResolver);
+				servicePort = service.getBasicHttpBindingILoyaltyIntegration();
+			}else{
+				log.fatal("ambiente " + amb + " non consentito");
+				return false;
+			}
+		}
+		catch(WebServiceException e){
+			e.printStackTrace();
+			log.fatal(e.toString());
+			return false;
 		}
 		
 		// ((BindingProvider)servicePort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:6969/WS/monitor"); // per tcp/ip monitor
 		log.info("]" + "connectWebService");
+		return true;
 	}
 	
 	private void creaDatiClient(){
@@ -341,6 +353,40 @@ public class Loyalty{
 		datiClient.setCodiceOperatore(codiceOperatore);
 		datiClient.setCodicePdv(codicePDV);
 		log.info("]" + "creaDatiClient");
+	}
+	
+	private void setDatiClientPerScontrino(String lycau){
+		log.info("[" + "setDatiClientPerScontrino");
+		
+		Integer numDep = Integer.parseInt(StringUtils.right(StringUtils.trimToEmpty(lycau), 1));
+		switch(numDep){
+			case 2: 	// termini
+				codiceOperatore = "OP025162";
+				codicePDV = "EC00000002516";
+				break;
+			case 5: 	// lascari
+				codiceOperatore = "OP120942";
+				codicePDV = "EC00000012094";
+				break;
+			case 6: 	// bagheria
+				codiceOperatore = "OP221521";
+				codicePDV = "EC00000022152";
+				break;
+			case 8: 	// brolo
+				codiceOperatore = "OP231773";
+				codicePDV = "EC00000023177";
+				break;				
+			default:	// termini
+				codiceOperatore = "OP025162";
+				codicePDV = "EC00000002516";
+				break;
+		}
+		codiceClient = "1";
+		
+		datiClient.setCodiceClient(codiceClient);
+		datiClient.setCodiceOperatore(codiceOperatore);
+		datiClient.setCodicePdv(codicePDV);
+		log.info("]" + "setDatiClientPerScontrino");
 	}
 	
 	private void manageRisposta(JAXBElement<RisultatoOperazione> jaxbElement, String strRisposta, AsLycmd0f cmd){
@@ -404,7 +450,14 @@ public class Loyalty{
 	
 	private void generazioneBuono(VerificaCodice verificaCodice, String valoreRichiesto, Integer puntiRichiesti, AsLycmd0f cmd){
 		log.info("[" + "generazioneBuono");
-		RisultatoGenerazioneBuono risRichiestaWS = servicePort.generazioneBuono(datiClient, verificaCodice, valoreRichiesto, puntiRichiesti);
+		RisultatoGenerazioneBuono risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.generazioneBuono(datiClient, verificaCodice, valoreRichiesto, puntiRichiesti);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		
 		String risParz = "";
 		stringBuilder = new StringBuilder();
@@ -431,8 +484,14 @@ public class Loyalty{
 	
 	private void saldoPunti(String codiceCard, AsLycmd0f cmd){
 		log.info("[" + "saldoPunti");
-		RisultatoSaldoPunti risRichiestaWS = servicePort.saldoPunti(datiClient, codiceCard);
-		
+		RisultatoSaldoPunti risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.saldoPunti(datiClient, codiceCard);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		String risParz = "";
 		stringBuilder = new StringBuilder();
 		
@@ -455,7 +514,14 @@ public class Loyalty{
 	
 	private void elencaTagliBuono(AsLycmd0f cmd){
 		log.info("[" + "elencaTagliBuono");
-		RisultatoTagliBuono risRichiestaWS = servicePort.elencaTagliBuono(datiClient);
+		RisultatoTagliBuono risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.elencaTagliBuono(datiClient);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		
 		String risParz = "";
 		stringBuilder = new StringBuilder();
@@ -523,8 +589,14 @@ public class Loyalty{
 	
 	private void verificaBuono(String codiceBuono, AsLycmd0f cmd){
 		log.info("[" + "verificaBuono");
-		RisultatoVerificaBuono risRichiestaWS = servicePort.verificaBuono(datiClient, codiceBuono);
-		
+		RisultatoVerificaBuono risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.verificaBuono(datiClient, codiceBuono);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		String risParz = "";
 		stringBuilder = new StringBuilder();
 		
@@ -544,8 +616,14 @@ public class Loyalty{
 	
 	private void utilizzaBuono(String codiceBuono, String totaleSpesa, String valutaSpesa, AsLycmd0f cmd){
 		log.info("[" + "utilizzaBuono");
-		RisultatoUtilizzoBuono risRichiestaWS = servicePort.utilizzaBuono(datiClient, codiceBuono, totaleSpesa, valutaSpesa);
-		
+		RisultatoUtilizzoBuono risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.utilizzaBuono(datiClient, codiceBuono, totaleSpesa, valutaSpesa);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		String risParz = "";
 		stringBuilder = new StringBuilder();
 		
@@ -727,7 +805,17 @@ public class Loyalty{
 	
 	private void caricamentoPunti(Scontrino scontrino, AsLymov0f lymov, AsLycmd0f cmd){
 		log.info("[" + "caricamentoPunti");
-		RisultatoCaricamentoPunti risRichiestaWS = servicePort.caricamentoPunti(datiClient, scontrino);
+		
+		setDatiClientPerScontrino(lymov.getId().getLycau());		
+		
+		RisultatoCaricamentoPunti risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.caricamentoPunti(datiClient, scontrino);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		manageRisposta(risRichiestaWS.getRisultatoOperazione(), "funzione senza risposta", cmd);
 		
 		String risposta[] = StringUtils.split(stringBuilder.toString(), sepCampiRisposta);
@@ -740,7 +828,14 @@ public class Loyalty{
 	
 	private void stornoScontrino(String idTransazione, AsLycmd0f cmd){
 		log.info("[" + "stornoScontrino");
-		RisultatoStornoScontrino risRichiestaWS = servicePort.stornoScontrino(datiClient, idTransazione);
+		RisultatoStornoScontrino risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.stornoScontrino(datiClient, idTransazione);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
 		manageRisposta(risRichiestaWS.getRisultatoOperazione(), "funzione senza risposta", cmd);
 		log.info("]" + "stornoScontrino");
 	}
