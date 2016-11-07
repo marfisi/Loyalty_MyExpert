@@ -707,7 +707,7 @@ public class Loyalty{
 		log.info("articolo: " + movma.getVcoda());
 		
 		Boolean eUnBuono = false;
-		if(StringUtils.equals(StringUtils.trimToEmpty(movma.getVcoda()), "/SCOCARD")) {
+		if((StringUtils.equals(StringUtils.trimToEmpty(movma.getVcoda()), "/SCOCARD")) || (StringUtils.equals(StringUtils.trimToEmpty(movma.getVcoda()), "/BUONOREG"))) {
 			eUnBuono = true;
 		}
 		

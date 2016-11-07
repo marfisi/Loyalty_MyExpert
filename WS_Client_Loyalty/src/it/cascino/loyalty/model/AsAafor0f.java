@@ -139,8 +139,8 @@ public class AsAafor0f implements Serializable{
 		stringBuilder.append("aades=" + StringUtils.trim(aades)).append(", ");
 		stringBuilder.append("aasfa=" + StringUtils.trim(aasfa)).append(", ");
 		stringBuilder.append("aamod=" + StringUtils.trim(aamod)).append(", ");
-		stringBuilder.append("aasfa=" + StringUtils.trim(aacex)).append(", ");
-		stringBuilder.append("aamod=" + StringUtils.trim(aaean));
+		stringBuilder.append("aacex=" + StringUtils.trim(aacex)).append(", ");
+		stringBuilder.append("aaean=" + StringUtils.trim(aaean));
 		stringBuilder.append("]");
 		return stringBuilder.toString();
 	}
