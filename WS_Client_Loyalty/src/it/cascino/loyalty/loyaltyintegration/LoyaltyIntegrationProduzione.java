@@ -1,5 +1,5 @@
 
-package org.tempuri;
+package it.cascino.loyalty.loyaltyintegration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,6 +9,7 @@ import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
+import org.tempuri.ILoyaltyIntegration;
 
 
 /**
@@ -17,8 +18,8 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "LoyaltyIntegration", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://eloyalty.services.akronimo.it/v1.0/LoyaltyIntegration.svc?singleWsdl")
-public class LoyaltyIntegrationTest
+@WebServiceClient(name = "LoyaltyIntegration", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://ws.expertonline.it/v1.2/LoyaltyIntegration.svc?singleWsdl")
+public class LoyaltyIntegrationProduzione
     extends Service
 {
 
@@ -30,7 +31,7 @@ public class LoyaltyIntegrationTest
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://eloyalty.services.akronimo.it/v1.0/LoyaltyIntegration.svc?singleWsdl");
+            url = new URL("http://ws.expertonline.it/v1.2/LoyaltyIntegration.svc?singleWsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -38,27 +39,27 @@ public class LoyaltyIntegrationTest
         LOYALTYINTEGRATION_EXCEPTION = e;
     }
 
-    public LoyaltyIntegrationTest() {
+    public LoyaltyIntegrationProduzione() {
         super(__getWsdlLocation(), LOYALTYINTEGRATION_QNAME);
     }
 
-    public LoyaltyIntegrationTest(WebServiceFeature... features) {
+    public LoyaltyIntegrationProduzione(WebServiceFeature... features) {
         super(__getWsdlLocation(), LOYALTYINTEGRATION_QNAME, features);
     }
 
-    public LoyaltyIntegrationTest(URL wsdlLocation) {
+    public LoyaltyIntegrationProduzione(URL wsdlLocation) {
         super(wsdlLocation, LOYALTYINTEGRATION_QNAME);
     }
 
-    public LoyaltyIntegrationTest(URL wsdlLocation, WebServiceFeature... features) {
+    public LoyaltyIntegrationProduzione(URL wsdlLocation, WebServiceFeature... features) {
         super(wsdlLocation, LOYALTYINTEGRATION_QNAME, features);
     }
 
-    public LoyaltyIntegrationTest(URL wsdlLocation, QName serviceName) {
+    public LoyaltyIntegrationProduzione(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
 
-    public LoyaltyIntegrationTest(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+    public LoyaltyIntegrationProduzione(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
         super(wsdlLocation, serviceName, features);
     }
 

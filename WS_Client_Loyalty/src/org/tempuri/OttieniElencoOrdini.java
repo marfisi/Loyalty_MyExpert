@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.FiltroElencoOrdini;
 
 
 /**
@@ -21,8 +22,7 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="datiClient" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}DatiClient" minOccurs="0"/>
- *         &lt;element name="codiceCard" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="codiceCardInterno" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="filtro" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}FiltroElencoOrdini" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,18 +34,15 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "datiClient",
-    "codiceCard",
-    "codiceCardInterno"
+    "filtro"
 })
-@XmlRootElement(name = "SaldoPunti")
-public class SaldoPunti {
+@XmlRootElement(name = "OttieniElencoOrdini")
+public class OttieniElencoOrdini {
 
     @XmlElementRef(name = "datiClient", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
     protected JAXBElement<DatiClient> datiClient;
-    @XmlElementRef(name = "codiceCard", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> codiceCard;
-    @XmlElementRef(name = "codiceCardInterno", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> codiceCardInterno;
+    @XmlElementRef(name = "filtro", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
+    protected JAXBElement<FiltroElencoOrdini> filtro;
 
     /**
      * Recupera il valore della proprietà datiClient.
@@ -72,51 +69,27 @@ public class SaldoPunti {
     }
 
     /**
-     * Recupera il valore della proprietà codiceCard.
+     * Recupera il valore della proprietà filtro.
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link JAXBElement }{@code <}{@link FiltroElencoOrdini }{@code >}
      *     
      */
-    public JAXBElement<String> getCodiceCard() {
-        return codiceCard;
+    public JAXBElement<FiltroElencoOrdini> getFiltro() {
+        return filtro;
     }
 
     /**
-     * Imposta il valore della proprietà codiceCard.
+     * Imposta il valore della proprietà filtro.
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link JAXBElement }{@code <}{@link FiltroElencoOrdini }{@code >}
      *     
      */
-    public void setCodiceCard(JAXBElement<String> value) {
-        this.codiceCard = value;
-    }
-
-    /**
-     * Recupera il valore della proprietà codiceCardInterno.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
-     *     
-     */
-    public JAXBElement<String> getCodiceCardInterno() {
-        return codiceCardInterno;
-    }
-
-    /**
-     * Imposta il valore della proprietà codiceCardInterno.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
-     *     
-     */
-    public void setCodiceCardInterno(JAXBElement<String> value) {
-        this.codiceCardInterno = value;
+    public void setFiltro(JAXBElement<FiltroElencoOrdini> value) {
+        this.filtro = value;
     }
 
 }

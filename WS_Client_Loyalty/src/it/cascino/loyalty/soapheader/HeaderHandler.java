@@ -3,7 +3,6 @@ package it.cascino.loyalty.soapheader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Set;
-import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -13,7 +12,6 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.apache.log4j.Logger;
-import it.cascino.loyalty.Loyalty;
 
 public class HeaderHandler implements SOAPHandler<SOAPMessageContext>{
 	private Logger log = Logger.getLogger(HeaderHandler.class);
@@ -103,6 +101,7 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext>{
 		return outboundProperty;
 	}
 	
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Set getHeaders(){
 		// throw new UnsupportedOperationException("Not supported yet.");
 		return null;

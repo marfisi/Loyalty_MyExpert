@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -18,34 +19,39 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.datacontract.schemas._2004._07.expert_loyalty_domain.ArrayOfTaglioBuono;
-import org.datacontract.schemas._2004._07.expert_loyalty_domain.TaglioBuono;
-import org.datacontract.schemas._2004._07.expert_loyalty_domain_services_dto.ArrayOfErrorMessage;
-import org.datacontract.schemas._2004._07.expert_loyalty_domain_services_dto.ErrorMessage;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.ArrayOfTaglioBuono;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.TaglioBuono;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.ArrayOfErrorMessage;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.ArrayOfStemma;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.ErrorMessage;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.GiftCard;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.ArrayOfDettaglioScontrino;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.DettaglioScontrino;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.ObjectFactory;
-//import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoBruciaturaPunti;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoAttivaGiftCard;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoCaricamentoPunti;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoGenerazioneBuono;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoLeggiGiftCard;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoOperazione;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoSaldoPunti;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoStornoScontrino;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoTagliBuono;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoUsaGiftCard;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoUtilizzoBuono;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoVerificaBuono;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.Scontrino;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.Stemma;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.VerificaCodice;
 import org.tempuri.ILoyaltyIntegration;
-import org.tempuri.LoyaltyIntegrationProduzione;
-import org.tempuri.LoyaltyIntegrationTest;
 import it.cascino.loyalty.dao.AsAafor0fDao;
 import it.cascino.loyalty.dao.AsAnmag0fDao;
 import it.cascino.loyalty.dao.AsLycmd0fDao;
 import it.cascino.loyalty.dao.AsLymov0fDao;
 import it.cascino.loyalty.dao.AsMovma0fDao;
 import it.cascino.loyalty.dao.AsTabel0fDao;
+import it.cascino.loyalty.loyaltyintegration.LoyaltyIntegrationProduzione;
+import it.cascino.loyalty.loyaltyintegration.LoyaltyIntegrationTest;
 import it.cascino.loyalty.managmentbean.AsAafor0fDaoMng;
 import it.cascino.loyalty.managmentbean.AsAnmag0fDaoMng;
 import it.cascino.loyalty.managmentbean.AsLycmd0fDaoMng;
@@ -77,6 +83,7 @@ public class Loyalty{
 	private String signature = "";
 	private String context = "";
 	private String indIP = "";
+	@SuppressWarnings("unused")
 	private String codiceRagSoc = "";
 	private String codicePDV = "";
 	private String codiceOperatore = "";
@@ -88,6 +95,7 @@ public class Loyalty{
 	private String punti = "";
 	private String ammontare = "";
 	private String codiceBuono = "";
+	private String codiceGiftCard = "";
 	private String idTransazione = "";
 	
 	private final String sepCampiRisposta = "|";
@@ -96,7 +104,7 @@ public class Loyalty{
 	private final String posArt = "posArt";
 	
 	private AsTabel0fDao asTabel0fDao = new AsTabel0fDaoMng();
-	private List<AsTabel0f> buoniLs;
+	//private List<AsTabel0f> buoniLs;
 	
 	private AsLycmd0fDao asLycmd0fDao = new AsLycmd0fDaoMng();
 	private List<AsLycmd0f> cmdLs;
@@ -202,6 +210,9 @@ public class Loyalty{
 					}else if(args[numArg].compareTo("-soldi") == 0) {
 						numArg++;
 						ammontare = args[numArg];
+					}else if(args[numArg].compareTo("-codiceGiftCard") == 0) {
+						numArg++;
+						codiceGiftCard = args[numArg];
 					}else if(args[numArg].compareTo("-idTrans") == 0) {
 						numArg++;
 						idTransazione = args[numArg];
@@ -266,31 +277,34 @@ public class Loyalty{
 					}
 				}else if(funzione.compareTo("saldoPunti") == 0) {
 					saldoPunti(codiceCard, cmd);
-					// }else if(funzione.compareTo("bruciaturaPunti") == 0) {
-					// VerificaCodice verificaCodice = creaVerificaCodice(codiceCard, caratteriControllo, posizioniControllo);
-					// bruciaturaPunti(verificaCodice, Integer.parseInt(punti), ammontare, cmd);
 				}else if(funzione.compareTo("generazioneBuono") == 0) {
 					VerificaCodice verificaCodice = creaVerificaCodice(codiceCard, caratteriControllo, posizioniControllo);
 					generazioneBuono(verificaCodice, ammontare, Integer.parseInt(punti), cmd);
-				}else if(funzione.compareTo("verificaBuono") == 0) {
-					verificaBuono(codiceBuono, cmd);
+				}else if(funzione.compareTo("verificaSpendibilitaBuono") == 0) {
+					verificaSpendibilitaBuono(codiceBuono, ammontare, cmd);
 				}else if(funzione.compareTo("utilizzaBuono") == 0) {
 					utilizzaBuono(codiceBuono, ammontare, "EUR", cmd);
 				}else if(funzione.compareTo("stornoScontrino") == 0) {
 					stornoScontrino(idTransazione, cmd);
 				}else if(funzione.compareTo("elencaTagliBuono") == 0) {
 					elencaTagliBuono(cmd);
+				}else if(funzione.compareTo("attivaGiftCard") == 0) {
+					attivaGiftCard(codiceGiftCard, cmd);
+				}else if(funzione.compareTo("leggGiftCard") == 0) {
+					leggiGiftCard(codiceGiftCard, cmd);
+				}else if(funzione.compareTo("usaGiftCard") == 0) {
+					usaGiftCard(codiceGiftCard, ammontare, caratteriControllo, idTransazione, cmd);
 				}else if(funzione.compareTo("caricamentoTracciatoFtp") == 0) {
 					ElaboraFtp elaboraFtp = new ElaboraFtp();
 					elaboraFtp.elaboraTracciato(new String[0], cmd);
 				}else if(funzione.compareTo("stopProgramma") == 0) {
 					stringBuilder = new StringBuilder();
-					stringBuilder.append("stoppato");
+					stringBuilder.append("stoppato" + sepStatoRisposta + "stoppato");
 					scriviRispostaInDb(cmd);
 					stopProgramma = true;
 				}else if(funzione.compareTo("setFrequenza") == 0) {
 					stringBuilder = new StringBuilder();
-					stringBuilder.append("frequenza modificata");
+					stringBuilder.append("frequenza modificata" + sepStatoRisposta + "frequenza modificata");
 					scriviRispostaInDb(cmd);
 					// frequenza viene settata con parametro -ms
 				}
@@ -361,23 +375,31 @@ public class Loyalty{
 		Integer numDep = Integer.parseInt(StringUtils.right(StringUtils.trimToEmpty(lycau), 1));
 		switch(numDep){
 			case 2: 	// termini
-				codiceOperatore = "OP025162";
+				codiceOperatore = "WS02516_ce8b";
 				codicePDV = "EC00000002516";
 				break;
 			case 5: 	// lascari
-				codiceOperatore = "OP120942";
+				codiceOperatore = "WS12094_1203";
 				codicePDV = "EC00000012094";
 				break;
 			case 6: 	// bagheria
-				codiceOperatore = "OP221521";
+				codiceOperatore = "WS22152_11a6";
 				codicePDV = "EC00000022152";
 				break;
 			case 8: 	// brolo
-				codiceOperatore = "OP231773";
+				codiceOperatore = "WS23177_3b59";
 				codicePDV = "EC00000023177";
-				break;				
+				break;
+			case 9: 	// enna
+				codiceOperatore = "WS25982_5539";
+				codicePDV = "EC00000025982";
+				break;
+			case 10: 	// sciacca
+				codiceOperatore = "WS25987_a425";
+				codicePDV = "EC00000025987";
+				break;
 			default:	// termini
-				codiceOperatore = "OP025162";
+				codiceOperatore = "WS02516_ce8b";
 				codicePDV = "EC00000002516";
 				break;
 		}
@@ -422,7 +444,11 @@ public class Loyalty{
 	}
 	
 	private void scriviRispostaInDb(AsLycmd0f cmd){
-		String rispostaSplit[] = stringBuilder.toString().split("(?<=\\G.{255})");
+		String risp = stringBuilder.substring(0, stringBuilder.indexOf(sepStatoRisposta));
+		risp = risp + "|";
+		String statoRisposta = stringBuilder.substring(stringBuilder.indexOf(sepStatoRisposta) + 1);		
+		
+		String rispostaSplit[] = risp.split("(?<=\\G.{256})");
 		String risposta[] = {"", "", "", "", "", "", "", ""};
 		for(int i = 0; i < rispostaSplit.length; i++){
 			risposta[i] = rispostaSplit[i];
@@ -434,7 +460,8 @@ public class Loyalty{
 		cmd.setLyris5(risposta[4]);
 		cmd.setLyris6(risposta[5]);
 		cmd.setLyris7(risposta[6]);
-		cmd.setLyris8(risposta[7]);
+		
+		cmd.setLyris8(statoRisposta);
 		asLycmd0fDao.updateRis(cmd);
 	}
 	
@@ -477,6 +504,9 @@ public class Loyalty{
 		risParz = sepCampiRisposta + "codice: " + risRichiestaWS.getCodiceBuono().getValue();
 		log.info(risParz);
 		stringBuilder.append(risParz);
+		risParz = sepCampiRisposta + "tipologia: " + risRichiestaWS.getTipologiaBuono().getValue();
+		log.info(risParz);
+		stringBuilder.append(risParz);
 		
 		manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
 		log.info("]" + "generazioneBuono");
@@ -486,7 +516,7 @@ public class Loyalty{
 		log.info("[" + "saldoPunti");
 		RisultatoSaldoPunti risRichiestaWS = null;
 		try{
-			risRichiestaWS = servicePort.saldoPunti(datiClient, codiceCard);
+			risRichiestaWS = servicePort.saldoPunti(datiClient, codiceCard, "");
 		}
 		catch(Exception e){
 			log.fatal("Errore connessione");
@@ -494,7 +524,7 @@ public class Loyalty{
 		}
 		String risParz = "";
 		stringBuilder = new StringBuilder();
-		
+
 		risParz = "punti: " + risRichiestaWS.getTotalePunti();
 		log.info(risParz);
 		stringBuilder.append(risParz);
@@ -504,7 +534,29 @@ public class Loyalty{
 		risParz = sepCampiRisposta + "miglior buono ottenibile: " + risRichiestaWS.getValoreMigliorBuonoOttenibile().getValue();
 		log.info(risParz);
 		stringBuilder.append(risParz);
-		risParz = sepCampiRisposta + "codice interno expert: " + risRichiestaWS.getCodiceInternoExpert().getValue();
+		risParz = sepCampiRisposta + "codice interno expert: " + risRichiestaWS.getCodiceCardInterno().getValue();
+		log.info(risParz);
+		stringBuilder.append(risParz);
+		risParz = sepCampiRisposta + "codice carta: " + risRichiestaWS.getCodiceCard().getValue();
+		log.info(risParz);
+		stringBuilder.append(risParz);
+		risParz = sepCampiRisposta + "livello: " + risRichiestaWS.getLivelloCard();
+		log.info(risParz);
+		stringBuilder.append(risParz);
+		risParz = sepCampiRisposta + "stemmi: ";
+		log.info(risParz);
+		stringBuilder.append(risParz);
+		ArrayOfStemma arrayOfStemma  = risRichiestaWS.getStemmi().getValue();
+		List<Stemma> stemmaLs = arrayOfStemma.getStemma();
+		Iterator<Stemma> iterStemmaLs = stemmaLs.iterator();
+		Stemma stemma = null;
+		while(iterStemmaLs.hasNext()){
+			stemma = iterStemmaLs.next();
+			risParz = stemma.getTipoStemma().getValue() + " ";
+			log.info(risParz);
+			stringBuilder.append(risParz);
+		}
+		risParz = sepCampiRisposta + "data di nascita: " + risRichiestaWS.getDataNascita().getValue();
 		log.info(risParz);
 		stringBuilder.append(risParz);
 		
@@ -543,12 +595,12 @@ public class Loyalty{
 			risParz = sepCampiRisposta + "min spesa: " + taglioBuono.getImportoMinimoSpesa() + sepCampiRisposta;
 			log.info(risParz);
 			stringBuilder.append(risParz);
-			risParz = sepCampiRisposta + "codice expert buono: " + taglioBuono.getCodiceExpertBuono().getValue() + sepCampiRisposta;
+			risParz = sepCampiRisposta + "codice expert buono: " + taglioBuono.getCodiceCCBuono().getValue() + sepCampiRisposta;
 			log.info(risParz);
 			stringBuilder.append(risParz);
 			buono.setTcoel(StringUtils.right("00" + taglioBuono.getValore().intValue(), 3));
 			buono.setTdesc("Buono Loyalty da " + taglioBuono.getValore() + " Euro");
-			buono.setTcomm(taglioBuono.getValore() + "-" + taglioBuono.getPunti() + "-" + taglioBuono.getImportoMinimoSpesa() + "-" + taglioBuono.getCodiceExpertBuono().getValue());
+			buono.setTcomm(taglioBuono.getValore() + "-" + taglioBuono.getPunti() + "-" + taglioBuono.getImportoMinimoSpesa() + "-" + taglioBuono.getCodiceCCBuono().getValue());
 			Integer aggiornata = Integer.parseInt(asTabel0fDao.updateBuono(buono));
 			if(!(aggiornata.equals(1))) {
 				asTabel0fDao.salva(buono);
@@ -560,38 +612,11 @@ public class Loyalty{
 		log.info("]" + "elencaTagliBuono");
 	}
 	
-	// private void bruciaturaPunti(VerificaCodice verificaCodice, Integer puntiRichiesti, String totaleSpesa, AsLycmd0f cmd){
-	// log.info("[" + "bruciaturaPunti");
-	// RisultatoBruciaturaPunti risRichiestaWS = servicePort.bruciaturaPunti(datiClient, verificaCodice, puntiRichiesti, totaleSpesa);
-	//
-	// String risParz = "";
-	// stringBuilder = new StringBuilder();
-	//
-	// risParz = "nuovo saldo punti: " + risRichiestaWS.getNuovoSaldoPunti();
-	// log.info(risParz);
-	// stringBuilder.append(risParz);
-	// risParz = sepCampiRisposta + "punti consumati: " + risRichiestaWS.getPuntiConsumati();
-	// log.info(risParz);
-	// stringBuilder.append(risParz);
-	// risParz = sepCampiRisposta + "valore: " + risRichiestaWS.getValoreBuono().getValue();
-	// log.info(risParz);
-	// stringBuilder.append(risParz);
-	// risParz = sepCampiRisposta + "valuta: " + risRichiestaWS.getValuta().getValue();
-	// log.info(risParz);
-	// stringBuilder.append(risParz);
-	// risParz = sepCampiRisposta + "codice: " + risRichiestaWS.getCodiceBuono().getValue();
-	// log.info(risParz);
-	// stringBuilder.append(risParz);
-	//
-	// manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
-	// log.info("]" + "bruciaturaPunti");
-	// }
-	
-	private void verificaBuono(String codiceBuono, AsLycmd0f cmd){
-		log.info("[" + "verificaBuono");
+	private void verificaSpendibilitaBuono(String codiceBuono, String totaleSpesa, AsLycmd0f cmd){
+		log.info("[" + "verificaSpendibilitaBuono");
 		RisultatoVerificaBuono risRichiestaWS = null;
 		try{
-			risRichiestaWS = servicePort.verificaBuono(datiClient, codiceBuono);
+			risRichiestaWS = servicePort.verificaSpendibilitaBuono(datiClient, codiceBuono, totaleSpesa);
 		}
 		catch(Exception e){
 			log.fatal("Errore connessione");
@@ -609,9 +634,12 @@ public class Loyalty{
 		risParz = sepCampiRisposta + "valore: " + risRichiestaWS.getValoreBuono().getValue();
 		log.info(risParz);
 		stringBuilder.append(risParz);
+		risParz = sepCampiRisposta + "tipologia: " + risRichiestaWS.getTipologiaBuono().getValue();
+		log.info(risParz);
+		stringBuilder.append(risParz);
 		
 		manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
-		log.info("]" + "verificaBuono");
+		log.info("]" + "verificaSpendibilitaBuono");
 	}
 	
 	private void utilizzaBuono(String codiceBuono, String totaleSpesa, String valutaSpesa, AsLycmd0f cmd){
@@ -636,6 +664,177 @@ public class Loyalty{
 		
 		manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
 		log.info("]" + "utilizzaBuono");
+	}
+	
+	private void attivaGiftCard(String codiceGiftCard, AsLycmd0f cmd){
+		log.info("[" + "attivaGiftCard");
+		RisultatoAttivaGiftCard risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.attivaGiftCard(datiClient, codiceGiftCard);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
+		String risParz = "";
+		stringBuilder = new StringBuilder();
+		
+		GiftCard giftCard = risRichiestaWS.getGiftCard().getValue();
+		
+		if(giftCard !=null){
+			risParz = "abilitata: " + giftCard.isAbilitata();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "attivabile: " + giftCard.isAttivabile();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "attivata: " + giftCard.isAttivata();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data attivazione: " + giftCard.getDataAttivazione();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data creazione: " + giftCard.getDataCreazione();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data scadenza: " + giftCard.getDataScadenza();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "numero: " + giftCard.getNumero();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "ricaricabile: " + giftCard.isRicaricabile();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "tipo: " + giftCard.getTipo();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "utilizzata: " + giftCard.isUtilizzata();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "valore residuo: " + giftCard.getValoreResiduo();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+		}
+		
+		manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
+		log.info("]" + "attivaGiftCard");
+	}
+	
+	private void leggiGiftCard(String codiceGiftCard, AsLycmd0f cmd){
+		log.info("[" + "leggiGiftCard");
+		RisultatoLeggiGiftCard risRichiestaWS = null;
+		try{
+			risRichiestaWS = servicePort.leggiGiftCard(datiClient, codiceGiftCard);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
+		String risParz = "";
+		stringBuilder = new StringBuilder();
+		
+		GiftCard giftCard = risRichiestaWS.getGiftCard().getValue();
+		
+		if(giftCard !=null){
+			risParz = "abilitata: " + giftCard.isAbilitata();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "attivabile: " + giftCard.isAttivabile();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "attivata: " + giftCard.isAttivata();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data attivazione: " + giftCard.getDataAttivazione();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data creazione: " + giftCard.getDataCreazione();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data scadenza: " + giftCard.getDataScadenza();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "numero: " + giftCard.getNumero();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "ricaricabile: " + giftCard.isRicaricabile();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "tipo: " + giftCard.getTipo();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "utilizzata: " + giftCard.isUtilizzata();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "valore residuo: " + giftCard.getValoreResiduo();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+		}
+		
+		manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
+		log.info("]" + "leggiGiftCard");
+	}
+	
+	private void usaGiftCard(String codiceGiftCard, String ammontare, String caratteriControllo, String idTransazione, AsLycmd0f cmd){
+		log.info("[" + "usaGiftCard");
+		RisultatoUsaGiftCard risRichiestaWS = null;
+		
+		BigDecimal bdModelVal = null;
+		BigDecimal bdDisplayVal = null;
+		bdModelVal = new BigDecimal(ammontare);
+		bdDisplayVal = bdModelVal.setScale(2,  BigDecimal.ROUND_HALF_UP);
+
+		try{
+			risRichiestaWS = servicePort.usaGiftCard(datiClient, codiceGiftCard, bdDisplayVal, caratteriControllo, idTransazione, "Gift  €" + bdDisplayVal + ", " + idTransazione);
+		}
+		catch(Exception e){
+			log.fatal("Errore connessione");
+			return;			
+		}
+		String risParz = "";
+		stringBuilder = new StringBuilder();
+		
+		GiftCard giftCard = risRichiestaWS.getGiftCard().getValue();
+		
+		if(giftCard !=null){
+			risParz = "abilitata: " + giftCard.isAbilitata();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "attivabile: " + giftCard.isAttivabile();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "attivata: " + giftCard.isAttivata();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data attivazione: " + giftCard.getDataAttivazione();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data creazione: " + giftCard.getDataCreazione();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "data scadenza: " + giftCard.getDataScadenza();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+			risParz = sepCampiRisposta + "numero: " + giftCard.getNumero();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "ricaricabile: " + giftCard.isRicaricabile();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "tipo: " + giftCard.getTipo();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "utilizzata: " + giftCard.isUtilizzata();
+			log.info(risParz);
+			stringBuilder.append(risParz);			
+			risParz = sepCampiRisposta + "valore residuo: " + giftCard.getValoreResiduo();
+			log.info(risParz);
+			stringBuilder.append(risParz);
+		}
+		
+		manageRisposta(risRichiestaWS.getRisultatoOperazione(), stringBuilder.toString(), cmd);
+		log.info("]" + "usaGiftCard");
 	}
 	
 	private Scontrino creaScontrino(AsLymov0f lymov, String idTransazione, String righeScontrino[]){

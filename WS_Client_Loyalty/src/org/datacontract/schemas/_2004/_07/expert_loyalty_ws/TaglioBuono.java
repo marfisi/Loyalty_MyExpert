@@ -1,5 +1,5 @@
 
-package org.datacontract.schemas._2004._07.expert_loyalty_domain;
+package org.datacontract.schemas._2004._07.expert_loyalty_ws;
 
 import java.math.BigDecimal;
 import javax.xml.bind.JAXBElement;
@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CodiceExpertBuono" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="CodiceCCBuono" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ImportoMinimoSpesa" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="Punti" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="Valore" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
@@ -34,15 +34,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TaglioBuono", propOrder = {
-    "codiceExpertBuono",
+    "codiceCCBuono",
     "importoMinimoSpesa",
     "punti",
     "valore"
 })
 public class TaglioBuono {
 
-    @XmlElementRef(name = "CodiceExpertBuono", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.Domain.Configurazione", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> codiceExpertBuono;
+    @XmlElementRef(name = "CodiceCCBuono", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> codiceCCBuono;
     @XmlElement(name = "ImportoMinimoSpesa")
     protected BigDecimal importoMinimoSpesa;
     @XmlElement(name = "Punti")
@@ -51,27 +51,27 @@ public class TaglioBuono {
     protected BigDecimal valore;
 
     /**
-     * Recupera il valore della proprietà codiceExpertBuono.
+     * Recupera il valore della proprietà codiceCCBuono.
      * 
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getCodiceExpertBuono() {
-        return codiceExpertBuono;
+    public JAXBElement<String> getCodiceCCBuono() {
+        return codiceCCBuono;
     }
 
     /**
-     * Imposta il valore della proprietà codiceExpertBuono.
+     * Imposta il valore della proprietà codiceCCBuono.
      * 
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setCodiceExpertBuono(JAXBElement<String> value) {
-        this.codiceExpertBuono = value;
+    public void setCodiceCCBuono(JAXBElement<String> value) {
+        this.codiceCCBuono = value;
     }
 
     /**

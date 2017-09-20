@@ -2,15 +2,12 @@ package it.cascino.loyalty.managmentbean;
 
 import java.io.Serializable;
 import java.util.List;
-import it.cascino.loyalty.model.AsLyanc0f;
 import it.cascino.loyalty.model.AsTabel0f;
 import it.cascino.loyalty.utils.Resources;
 import it.cascino.loyalty.dao.AsTabel0fDao;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
@@ -87,7 +84,6 @@ public class AsTabel0fDaoMng implements AsTabel0fDao, Serializable{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public AsTabel0f getBuono(String tcoel){
 		AsTabel0f t = null;
 		try{

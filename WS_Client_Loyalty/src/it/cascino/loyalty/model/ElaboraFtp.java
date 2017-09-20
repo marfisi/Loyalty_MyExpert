@@ -1,13 +1,10 @@
 package it.cascino.loyalty.model;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,12 +21,11 @@ public class ElaboraFtp{
 	private Logger log = Logger.getLogger(ElaboraFtp.class);
 	
 	private String basePathInput = "C:/dev/Loyalty/ftp/";
-	private String fileNameInput = basePathInput + "estrazione_card.txt";
+	private String fileNameInput = basePathInput + "estrazione_card_V1_1.txt";
 	
 	private File fileInput;
 	
 	private List<String> lstRowInput = new ArrayList<String>();
-	private StringBuilder stringBuilder = null;
 	
 	private List<AsLyanc0f> asLyanc0fDaFileLs = new ArrayList<AsLyanc0f>();
 	
@@ -74,15 +70,17 @@ public class ElaboraFtp{
 			
 			elaboraLstRowInput();
 			
-			aggiornaAsLyana0f();
+			aggiornaAsLyanc0f();
 			
 			cmd.setLyris1("OK-Caricamento FTP eseguito");
+			cmd.setLyris8("OK-Caricamento FTP eseguito");
 			asLycmd0fDao.updateRis(cmd);
 			asLycmd0fDao.close();
 		}catch(IOException ioe){// Catch exception if any
 			// System.err.println("Error: " + ioe.getMessage());
 			log.fatal("Error: " + ioe.getMessage());
 			cmd.setLyris1("Error: " + ioe.getMessage());
+			cmd.setLyris8("Error: " + ioe.getMessage());
 			asLycmd0fDao.updateRis(cmd);
 		}
 	}
@@ -103,11 +101,13 @@ public class ElaboraFtp{
 			
 			a = new AsLyanc0f();
 			
-			// gestisto il doppio tab senza contenuto nel mezzo
+			// gestisto il multi tab senza contenuto nel mezzo
+			value = StringUtils.replace(value, separator + separator + separator + separator, separator + " " + separator + " " + separator + " " + separator);
+			value = StringUtils.replace(value, separator + separator + separator, separator + " " + separator + " " + separator);
 			value = StringUtils.replace(value, separator + separator, separator + " " + separator);
 			values = StringUtils.split(value, separator);
 			
-			// values[0]; // e' il RS005
+			// values[0]; // e' il RS079
 			
 			// letti da file
 			a.setLypdv((StringUtils.isEmpty(StringUtils.trimToEmpty(values[1]))) ? "" : StringUtils.trimToEmpty(values[1]));
@@ -130,6 +130,8 @@ public class ElaboraFtp{
 			a.setLysta((StringUtils.isEmpty(StringUtils.trimToEmpty(values[14]))) ? "" : StringUtils.trimToEmpty(values[14]));
 			a.setLyste((StringUtils.isEmpty(StringUtils.trimToEmpty(values[15]))) ? "" : StringUtils.trimToEmpty(values[15]));
 			a.setLybuo((StringUtils.isEmpty(StringUtils.trimToEmpty(values[16]))) ? "" : StringUtils.trimToEmpty(values[16]));
+			a.setLymai(StringUtils.lowerCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[17]))) ? "" : StringUtils.trimToEmpty(values[17])) + StringUtils.trimToEmpty(values[18]));
+			a.setLytel(StringUtils.lowerCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[19]))) ? "" : StringUtils.trimToEmpty(values[19])) + StringUtils.trimToEmpty(values[20]));
 			
 			// tutti i dati seguenti sono gia' aggiornati da alessandra e agostino
 //			a.setLyses("M");
@@ -137,8 +139,6 @@ public class ElaboraFtp{
 //			a.setLydcr(20150101); // data creazione
 //			a.setLydup(20150130); // data aggiornamento
 //			a.setLyduv(20150115); // data ultima visita
-//			a.setLymai("aassaaa@ffaff.it");
-//			a.setLytel(StringUtils.deleteWhitespace("+39 091 814"));
 //			a.setLyvis(123); // numero visite
 //			a.setLytsp(123456.54f); // totale importo speso
 //			a.setLyimo(187.13f); // importo massima operazione
@@ -151,7 +151,7 @@ public class ElaboraFtp{
 		}
 	}
 	
-	private void aggiornaAsLyana0f(){
+	private void aggiornaAsLyanc0f(){
 		AsLyanc0fDao asLyanc0fDao = new AsLyanc0fDaoMng();
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -242,11 +242,25 @@ public class ElaboraFtp{
 					aInDb.setLybuo(StringUtils.trimToEmpty(aInFile.getLybuo()));
 					daAggiornare = true;
 				}
+				if(!(StringUtils.equals(StringUtils.trimToEmpty(aInDb.getLymai()), StringUtils.trimToEmpty(aInFile.getLymai())))){
+					if(StringUtils.isBlank(aInDb.getLymai())){
+						aInDb.setLymai(StringUtils.trimToEmpty(aInFile.getLymai()));
+					}else{
+						aInDb.setLyste(StringUtils.trimToEmpty(aInFile.getLymai()) + " | " + StringUtils.trimToEmpty(aInFile.getLytel()));						
+					}
+					daAggiornare = true;
+				}
+				if(!(StringUtils.equals(StringUtils.trimToEmpty(aInDb.getLytel()), StringUtils.trimToEmpty(aInFile.getLytel())))){
+					if(StringUtils.isBlank(aInDb.getLytel())){
+						aInDb.setLytel(StringUtils.trimToEmpty(aInFile.getLytel()));
+					}else{
+						aInDb.setLyste(StringUtils.trimToEmpty(aInFile.getLymai()) + " | " + StringUtils.trimToEmpty(aInFile.getLytel()));						
+					}
+					daAggiornare = true;
+				}
 				// aInDb.setLydcr	// rimane quello del db, dato che nel file non e' presente
 				// aInDb.setLydup	// e' gestita alla fine, se c'e' almeno un aggiornamento
 				// aInDb.setLyduv	// rimane quello del db, dato che nel file non e' presente
-				// aInDb.setLymai	// rimane quello del db, dato che nel file non e' presente
-				// aInDb.setLytel	// rimane quello del db, dato che nel file non e' presente
 				// aInDb.setLyvis	// rimane quello del db, dato che nel file non e' presente
 				// aInDb.setLytsp	// rimane quello del db, dato che nel file non e' presente
 				// aInDb.setLyimo	// rimane quello del db, dato che nel file non e' presente
@@ -264,8 +278,6 @@ public class ElaboraFtp{
 				aInFile.setLyses("");
 				aInFile.setLycfp("");
 				aInFile.setLyduv(20150101); // data ultima visita
-				aInFile.setLymai("");
-				aInFile.setLytel("");
 				aInFile.setLyvis(1); // numero visite
 				aInFile.setLytsp(0.0f); // totale importo speso
 				aInFile.setLyimo(0.0f); // importo massima operazione

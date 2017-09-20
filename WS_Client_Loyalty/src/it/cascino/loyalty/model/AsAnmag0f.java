@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 */
 @Entity(name="Anmag0f")
 @NamedQueries({
-	@NamedQuery(name = "AsAnmag0f.findAll", query = "SELECT a FROM Anmag0f a WHERE a.atama != 'A'"),
-	@NamedQuery(name = "AsAnmag0f.findByMcoda", query = "SELECT a FROM Anmag0f a WHERE a.atama != 'A' and a.mcoda = :mcoda ")
+	@NamedQuery(name = "AsAnmag0f.findAll", query = "SELECT a FROM Anmag0f a WHERE a.atama != 'A' and a.atama != 'S'"),
+	@NamedQuery(name = "AsAnmag0f.findByMcoda", query = "SELECT a FROM Anmag0f a WHERE a.atama != 'A' and a.atama != 'S' and a.mcoda = :mcoda ")
 })
 public class AsAnmag0f implements Serializable{
 	private static final long serialVersionUID = 1L;

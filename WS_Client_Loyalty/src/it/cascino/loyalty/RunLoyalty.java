@@ -11,6 +11,7 @@ public class RunLoyalty{
 		log = Logger.getLogger(RunLoyalty.class);
 		log.info("START");
 		
+		@SuppressWarnings("unused")
 		Loyalty loyalty = new Loyalty(args);
 		
 		log.info("STOP");

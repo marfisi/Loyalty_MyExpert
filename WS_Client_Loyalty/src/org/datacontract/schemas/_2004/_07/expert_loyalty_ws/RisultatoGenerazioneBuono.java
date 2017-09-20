@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="NuovoSaldoPunti" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="PuntiConsumati" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="RisultatoOperazione" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}RisultatoOperazione" minOccurs="0"/>
+ *         &lt;element name="TipologiaBuono" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ValoreBuono" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Valuta" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
     "nuovoSaldoPunti",
     "puntiConsumati",
     "risultatoOperazione",
+    "tipologiaBuono",
     "valoreBuono",
     "valuta"
 })
@@ -52,6 +54,8 @@ public class RisultatoGenerazioneBuono {
     protected Integer puntiConsumati;
     @XmlElementRef(name = "RisultatoOperazione", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<RisultatoOperazione> risultatoOperazione;
+    @XmlElementRef(name = "TipologiaBuono", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> tipologiaBuono;
     @XmlElementRef(name = "ValoreBuono", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<String> valoreBuono;
     @XmlElementRef(name = "Valuta", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
@@ -151,6 +155,30 @@ public class RisultatoGenerazioneBuono {
      */
     public void setRisultatoOperazione(JAXBElement<RisultatoOperazione> value) {
         this.risultatoOperazione = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà tipologiaBuono.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public JAXBElement<String> getTipologiaBuono() {
+        return tipologiaBuono;
+    }
+
+    /**
+     * Imposta il valore della proprietà tipologiaBuono.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public void setTipologiaBuono(JAXBElement<String> value) {
+        this.tipologiaBuono = value;
     }
 
     /**

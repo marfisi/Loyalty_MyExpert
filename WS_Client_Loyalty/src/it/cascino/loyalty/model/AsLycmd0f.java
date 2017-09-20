@@ -4,8 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import it.cascino.loyalty.model.pkey.AsLycmd0fPKey;
-import it.cascino.loyalty.model.pkey.AsLymov0fPKey;
-import it.cascino.loyalty.model.pkey.AsMovma0fPKey;
 
 /**
 * The persistent class for the cas_dat/lycmd0f database table.

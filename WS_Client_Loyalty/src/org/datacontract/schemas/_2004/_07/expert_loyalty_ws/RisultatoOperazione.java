@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
-import org.datacontract.schemas._2004._07.expert_loyalty_domain_services_dto.ArrayOfErrorMessage;
 
 
 /**
@@ -21,7 +20,7 @@ import org.datacontract.schemas._2004._07.expert_loyalty_domain_services_dto.Arr
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="CodiceStato" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="Errori" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.Domain.Services.DTO.Base}ArrayOfErrorMessage" minOccurs="0"/>
+ *         &lt;element name="Errori" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}ArrayOfErrorMessage" minOccurs="0"/>
  *         &lt;element name="IdRichiesta" type="{http://schemas.microsoft.com/2003/10/Serialization/}guid" minOccurs="0"/>
  *         &lt;element name="Timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>

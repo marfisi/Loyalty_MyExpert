@@ -2,8 +2,8 @@ package it.cascino.loyalty.managmentbean;
 
 import java.io.Serializable;
 //import java.rmi.RemoteException;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+//import javax.faces.bean.ManagedBean;
+//import javax.faces.bean.SessionScoped;
 //import javax.inject.Named;
 //import org.apache.axis.AxisFault;
 //import org.datacontract.schemas._2004._07.Expert_Loyalty_WS_DTO.DatiClient;
@@ -12,8 +12,8 @@ import javax.faces.bean.SessionScoped;
 //import org.tempuri.LoyaltyIntegrationLocator;
 //import sun.net.www.protocol.http.AuthenticationHeader;
 
-@ManagedBean
-@SessionScoped
+//@ManagedBean
+//@SessionScoped
 public class WSManBean implements Serializable{
 	/**
 	 * 

@@ -9,17 +9,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java per RisultatoTagliBuono complex type.
+ * <p>Classe Java per RisultatoConfermaRiga complex type.
  * 
  * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
  * 
  * <pre>
- * &lt;complexType name="RisultatoTagliBuono">
+ * &lt;complexType name="RisultatoConfermaRiga">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="RisultatoOperazione" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}RisultatoOperazione" minOccurs="0"/>
- *         &lt;element name="TagliBuono" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}ArrayOfTaglioBuono" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,16 +28,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RisultatoTagliBuono", propOrder = {
-    "risultatoOperazione",
-    "tagliBuono"
+@XmlType(name = "RisultatoConfermaRiga", propOrder = {
+    "risultatoOperazione"
 })
-public class RisultatoTagliBuono {
+public class RisultatoConfermaRiga {
 
     @XmlElementRef(name = "RisultatoOperazione", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<RisultatoOperazione> risultatoOperazione;
-    @XmlElementRef(name = "TagliBuono", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
-    protected JAXBElement<ArrayOfTaglioBuono> tagliBuono;
 
     /**
      * Recupera il valore della proprietà risultatoOperazione.
@@ -62,30 +58,6 @@ public class RisultatoTagliBuono {
      */
     public void setRisultatoOperazione(JAXBElement<RisultatoOperazione> value) {
         this.risultatoOperazione = value;
-    }
-
-    /**
-     * Recupera il valore della proprietà tagliBuono.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JAXBElement }{@code <}{@link ArrayOfTaglioBuono }{@code >}
-     *     
-     */
-    public JAXBElement<ArrayOfTaglioBuono> getTagliBuono() {
-        return tagliBuono;
-    }
-
-    /**
-     * Imposta il valore della proprietà tagliBuono.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link ArrayOfTaglioBuono }{@code >}
-     *     
-     */
-    public void setTagliBuono(JAXBElement<ArrayOfTaglioBuono> value) {
-        this.tagliBuono = value;
     }
 
 }

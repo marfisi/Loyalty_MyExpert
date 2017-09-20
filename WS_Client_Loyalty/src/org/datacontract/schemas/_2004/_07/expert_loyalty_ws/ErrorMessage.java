@@ -1,5 +1,5 @@
 
-package org.datacontract.schemas._2004._07.expert_loyalty_domain_services_dto;
+package org.datacontract.schemas._2004._07.expert_loyalty_ws;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ErrorMessage {
 
-    @XmlElementRef(name = "Context", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.Domain.Services.DTO.Base", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "Context", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<String> context;
-    @XmlElementRef(name = "Description", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.Domain.Services.DTO.Base", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "Description", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<String> description;
 
     /**

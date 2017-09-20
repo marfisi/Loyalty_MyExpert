@@ -20,7 +20,7 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoVerificaBuo
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="VerificaBuonoResult" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}RisultatoVerificaBuono" minOccurs="0"/>
+ *         &lt;element name="VerificaSpendibilitaBuonoResult" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}RisultatoVerificaBuono" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,36 +31,36 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoVerificaBuo
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "verificaBuonoResult"
+    "verificaSpendibilitaBuonoResult"
 })
-@XmlRootElement(name = "VerificaBuonoResponse")
-public class VerificaBuonoResponse {
+@XmlRootElement(name = "VerificaSpendibilitaBuonoResponse")
+public class VerificaSpendibilitaBuonoResponse {
 
-    @XmlElementRef(name = "VerificaBuonoResult", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<RisultatoVerificaBuono> verificaBuonoResult;
+    @XmlElementRef(name = "VerificaSpendibilitaBuonoResult", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
+    protected JAXBElement<RisultatoVerificaBuono> verificaSpendibilitaBuonoResult;
 
     /**
-     * Recupera il valore della proprietà verificaBuonoResult.
+     * Recupera il valore della proprietà verificaSpendibilitaBuonoResult.
      * 
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link RisultatoVerificaBuono }{@code >}
      *     
      */
-    public JAXBElement<RisultatoVerificaBuono> getVerificaBuonoResult() {
-        return verificaBuonoResult;
+    public JAXBElement<RisultatoVerificaBuono> getVerificaSpendibilitaBuonoResult() {
+        return verificaSpendibilitaBuonoResult;
     }
 
     /**
-     * Imposta il valore della proprietà verificaBuonoResult.
+     * Imposta il valore della proprietà verificaSpendibilitaBuonoResult.
      * 
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link RisultatoVerificaBuono }{@code >}
      *     
      */
-    public void setVerificaBuonoResult(JAXBElement<RisultatoVerificaBuono> value) {
-        this.verificaBuonoResult = value;
+    public void setVerificaSpendibilitaBuonoResult(JAXBElement<RisultatoVerificaBuono> value) {
+        this.verificaSpendibilitaBuonoResult = value;
     }
 
 }

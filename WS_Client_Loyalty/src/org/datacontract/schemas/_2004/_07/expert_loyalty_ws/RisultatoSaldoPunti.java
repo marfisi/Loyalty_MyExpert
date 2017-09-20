@@ -19,9 +19,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CodiceInternoExpert" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="CodiceCard" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="CodiceCardInterno" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="DataAggiornamentoSaldo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="DataNascita" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="LivelloCard" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="RisultatoOperazione" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}RisultatoOperazione" minOccurs="0"/>
+ *         &lt;element name="Stemmi" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}ArrayOfStemma" minOccurs="0"/>
  *         &lt;element name="TotalePunti" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="ValoreMigliorBuonoOttenibile" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,47 +38,83 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RisultatoSaldoPunti", propOrder = {
-    "codiceInternoExpert",
+    "codiceCard",
+    "codiceCardInterno",
     "dataAggiornamentoSaldo",
+    "dataNascita",
+    "livelloCard",
     "risultatoOperazione",
+    "stemmi",
     "totalePunti",
     "valoreMigliorBuonoOttenibile"
 })
 public class RisultatoSaldoPunti {
 
-    @XmlElementRef(name = "CodiceInternoExpert", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> codiceInternoExpert;
+    @XmlElementRef(name = "CodiceCard", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> codiceCard;
+    @XmlElementRef(name = "CodiceCardInterno", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> codiceCardInterno;
     @XmlElementRef(name = "DataAggiornamentoSaldo", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<String> dataAggiornamentoSaldo;
+    @XmlElementRef(name = "DataNascita", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> dataNascita;
+    @XmlElement(name = "LivelloCard")
+    protected Integer livelloCard;
     @XmlElementRef(name = "RisultatoOperazione", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<RisultatoOperazione> risultatoOperazione;
+    @XmlElementRef(name = "Stemmi", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
+    protected JAXBElement<ArrayOfStemma> stemmi;
     @XmlElement(name = "TotalePunti")
     protected Integer totalePunti;
     @XmlElementRef(name = "ValoreMigliorBuonoOttenibile", namespace = "http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO", type = JAXBElement.class, required = false)
     protected JAXBElement<String> valoreMigliorBuonoOttenibile;
 
     /**
-     * Recupera il valore della proprietà codiceInternoExpert.
+     * Recupera il valore della proprietà codiceCard.
      * 
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getCodiceInternoExpert() {
-        return codiceInternoExpert;
+    public JAXBElement<String> getCodiceCard() {
+        return codiceCard;
     }
 
     /**
-     * Imposta il valore della proprietà codiceInternoExpert.
+     * Imposta il valore della proprietà codiceCard.
      * 
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setCodiceInternoExpert(JAXBElement<String> value) {
-        this.codiceInternoExpert = value;
+    public void setCodiceCard(JAXBElement<String> value) {
+        this.codiceCard = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà codiceCardInterno.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public JAXBElement<String> getCodiceCardInterno() {
+        return codiceCardInterno;
+    }
+
+    /**
+     * Imposta il valore della proprietà codiceCardInterno.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public void setCodiceCardInterno(JAXBElement<String> value) {
+        this.codiceCardInterno = value;
     }
 
     /**
@@ -102,6 +142,54 @@ public class RisultatoSaldoPunti {
     }
 
     /**
+     * Recupera il valore della proprietà dataNascita.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public JAXBElement<String> getDataNascita() {
+        return dataNascita;
+    }
+
+    /**
+     * Imposta il valore della proprietà dataNascita.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public void setDataNascita(JAXBElement<String> value) {
+        this.dataNascita = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà livelloCard.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getLivelloCard() {
+        return livelloCard;
+    }
+
+    /**
+     * Imposta il valore della proprietà livelloCard.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setLivelloCard(Integer value) {
+        this.livelloCard = value;
+    }
+
+    /**
      * Recupera il valore della proprietà risultatoOperazione.
      * 
      * @return
@@ -123,6 +211,30 @@ public class RisultatoSaldoPunti {
      */
     public void setRisultatoOperazione(JAXBElement<RisultatoOperazione> value) {
         this.risultatoOperazione = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà stemmi.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link ArrayOfStemma }{@code >}
+     *     
+     */
+    public JAXBElement<ArrayOfStemma> getStemmi() {
+        return stemmi;
+    }
+
+    /**
+     * Imposta il valore della proprietà stemmi.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link ArrayOfStemma }{@code >}
+     *     
+     */
+    public void setStemmi(JAXBElement<ArrayOfStemma> value) {
+        this.stemmi = value;
     }
 
     /**

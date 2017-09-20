@@ -1,6 +1,7 @@
 
 package org.tempuri;
 
+import java.math.BigDecimal;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -9,12 +10,20 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
-import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoBruciaturaPunti;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.FiltroElencoOrdini;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.Riparazione;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoAttivaGiftCard;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoCaricamentoPunti;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoConfermaRiga;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoGenerazioneBuono;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoInserisciRiparazione;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoLeggiGiftCard;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoOttieniElencoOrdini;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoOttieniOrdine;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoSaldoPunti;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoStornoScontrino;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoTagliBuono;
+import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoUsaGiftCard;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoUtilizzoBuono;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoVerificaBuono;
 import org.datacontract.schemas._2004._07.expert_loyalty_ws.Scontrino;
@@ -30,8 +39,6 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.VerificaCodice;
 @WebService(name = "ILoyaltyIntegration", targetNamespace = "http://tempuri.org/")
 @XmlSeeAlso({
     com.microsoft.schemas._2003._10.serialization.ObjectFactory.class,
-    org.datacontract.schemas._2004._07.expert_loyalty_domain.ObjectFactory.class,
-    org.datacontract.schemas._2004._07.expert_loyalty_domain_services_dto.ObjectFactory.class,
     org.datacontract.schemas._2004._07.expert_loyalty_ws.ObjectFactory.class,
     org.datacontract.schemas._2004._07.shield.ObjectFactory.class,
     org.shield_services.ObjectFactory.class,
@@ -76,6 +83,7 @@ public interface ILoyaltyIntegration {
 
     /**
      * 
+     * @param codiceCardInterno
      * @param datiClient
      * @param codiceCard
      * @return
@@ -89,30 +97,9 @@ public interface ILoyaltyIntegration {
         @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
         DatiClient datiClient,
         @WebParam(name = "codiceCard", targetNamespace = "http://tempuri.org/")
-        String codiceCard);
-
-    /**
-     * 
-     * @param verificaCodice
-     * @param datiClient
-     * @param totaleSpesa
-     * @param puntiRichiesti
-     * @return
-     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoBruciaturaPunti
-     */
-    @WebMethod(operationName = "BruciaturaPunti", action = "http://tempuri.org/ILoyaltyIntegration/BruciaturaPunti")
-    @WebResult(name = "BruciaturaPuntiResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "BruciaturaPunti", targetNamespace = "http://tempuri.org/", className = "org.tempuri.BruciaturaPunti")
-    @ResponseWrapper(localName = "BruciaturaPuntiResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.BruciaturaPuntiResponse")
-    public RisultatoBruciaturaPunti bruciaturaPunti(
-        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
-        DatiClient datiClient,
-        @WebParam(name = "verificaCodice", targetNamespace = "http://tempuri.org/")
-        VerificaCodice verificaCodice,
-        @WebParam(name = "puntiRichiesti", targetNamespace = "http://tempuri.org/")
-        Integer puntiRichiesti,
-        @WebParam(name = "totaleSpesa", targetNamespace = "http://tempuri.org/")
-        String totaleSpesa);
+        String codiceCard,
+        @WebParam(name = "codiceCardInterno", targetNamespace = "http://tempuri.org/")
+        String codiceCardInterno);
 
     /**
      * 
@@ -141,18 +128,21 @@ public interface ILoyaltyIntegration {
      * 
      * @param datiClient
      * @param codiceBuono
+     * @param totaleSpesa
      * @return
      *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoVerificaBuono
      */
-    @WebMethod(operationName = "VerificaBuono", action = "http://tempuri.org/ILoyaltyIntegration/VerificaBuono")
-    @WebResult(name = "VerificaBuonoResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "VerificaBuono", targetNamespace = "http://tempuri.org/", className = "org.tempuri.VerificaBuono")
-    @ResponseWrapper(localName = "VerificaBuonoResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.VerificaBuonoResponse")
-    public RisultatoVerificaBuono verificaBuono(
+    @WebMethod(operationName = "VerificaSpendibilitaBuono", action = "http://tempuri.org/ILoyaltyIntegration/VerificaSpendibilitaBuono")
+    @WebResult(name = "VerificaSpendibilitaBuonoResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "VerificaSpendibilitaBuono", targetNamespace = "http://tempuri.org/", className = "org.tempuri.VerificaSpendibilitaBuono")
+    @ResponseWrapper(localName = "VerificaSpendibilitaBuonoResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.VerificaSpendibilitaBuonoResponse")
+    public RisultatoVerificaBuono verificaSpendibilitaBuono(
         @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
         DatiClient datiClient,
         @WebParam(name = "codiceBuono", targetNamespace = "http://tempuri.org/")
-        String codiceBuono);
+        String codiceBuono,
+        @WebParam(name = "totaleSpesa", targetNamespace = "http://tempuri.org/")
+        String totaleSpesa);
 
     /**
      * 
@@ -190,5 +180,139 @@ public interface ILoyaltyIntegration {
     public RisultatoTagliBuono elencaTagliBuono(
         @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
         DatiClient datiClient);
+
+    /**
+     * 
+     * @param datiClient
+     * @param riparazione
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoInserisciRiparazione
+     */
+    @WebMethod(operationName = "InserisciRiparazione", action = "http://tempuri.org/ILoyaltyIntegration/InserisciRiparazione")
+    @WebResult(name = "InserisciRiparazioneResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "InserisciRiparazione", targetNamespace = "http://tempuri.org/", className = "org.tempuri.InserisciRiparazione")
+    @ResponseWrapper(localName = "InserisciRiparazioneResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.InserisciRiparazioneResponse")
+    public RisultatoInserisciRiparazione inserisciRiparazione(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "riparazione", targetNamespace = "http://tempuri.org/")
+        Riparazione riparazione);
+
+    /**
+     * 
+     * @param datiClient
+     * @param numeroGiftCard
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoLeggiGiftCard
+     */
+    @WebMethod(operationName = "LeggiGiftCard", action = "http://tempuri.org/ILoyaltyIntegration/LeggiGiftCard")
+    @WebResult(name = "LeggiGiftCardResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "LeggiGiftCard", targetNamespace = "http://tempuri.org/", className = "org.tempuri.LeggiGiftCard")
+    @ResponseWrapper(localName = "LeggiGiftCardResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.LeggiGiftCardResponse")
+    public RisultatoLeggiGiftCard leggiGiftCard(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "numeroGiftCard", targetNamespace = "http://tempuri.org/")
+        String numeroGiftCard);
+
+    /**
+     * 
+     * @param datiClient
+     * @param numeroGiftCard
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoAttivaGiftCard
+     */
+    @WebMethod(operationName = "AttivaGiftCard", action = "http://tempuri.org/ILoyaltyIntegration/AttivaGiftCard")
+    @WebResult(name = "AttivaGiftCardResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "AttivaGiftCard", targetNamespace = "http://tempuri.org/", className = "org.tempuri.AttivaGiftCard")
+    @ResponseWrapper(localName = "AttivaGiftCardResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.AttivaGiftCardResponse")
+    public RisultatoAttivaGiftCard attivaGiftCard(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "numeroGiftCard", targetNamespace = "http://tempuri.org/")
+        String numeroGiftCard);
+
+    /**
+     * 
+     * @param datiClient
+     * @param numeroGiftCard
+     * @param pin
+     * @param importo
+     * @param descrizioneOperazione
+     * @param numeroScontrino
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoUsaGiftCard
+     */
+    @WebMethod(operationName = "UsaGiftCard", action = "http://tempuri.org/ILoyaltyIntegration/UsaGiftCard")
+    @WebResult(name = "UsaGiftCardResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "UsaGiftCard", targetNamespace = "http://tempuri.org/", className = "org.tempuri.UsaGiftCard")
+    @ResponseWrapper(localName = "UsaGiftCardResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.UsaGiftCardResponse")
+    public RisultatoUsaGiftCard usaGiftCard(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "numeroGiftCard", targetNamespace = "http://tempuri.org/")
+        String numeroGiftCard,
+        @WebParam(name = "importo", targetNamespace = "http://tempuri.org/")
+        BigDecimal importo,
+        @WebParam(name = "pin", targetNamespace = "http://tempuri.org/")
+        String pin,
+        @WebParam(name = "numeroScontrino", targetNamespace = "http://tempuri.org/")
+        String numeroScontrino,
+        @WebParam(name = "descrizioneOperazione", targetNamespace = "http://tempuri.org/")
+        String descrizioneOperazione);
+
+    /**
+     * 
+     * @param datiClient
+     * @param idRigaUnivoca
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoOttieniOrdine
+     */
+    @WebMethod(operationName = "OttieniOrdine", action = "http://tempuri.org/ILoyaltyIntegration/OttieniOrdine")
+    @WebResult(name = "OttieniOrdineResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "OttieniOrdine", targetNamespace = "http://tempuri.org/", className = "org.tempuri.OttieniOrdine")
+    @ResponseWrapper(localName = "OttieniOrdineResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.OttieniOrdineResponse")
+    public RisultatoOttieniOrdine ottieniOrdine(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "idRigaUnivoca", targetNamespace = "http://tempuri.org/")
+        String idRigaUnivoca);
+
+    /**
+     * 
+     * @param datiClient
+     * @param idRigaUnivoca
+     * @param disponibile
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoConfermaRiga
+     */
+    @WebMethod(operationName = "ConfermaRiga", action = "http://tempuri.org/ILoyaltyIntegration/ConfermaRiga")
+    @WebResult(name = "ConfermaRigaResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "ConfermaRiga", targetNamespace = "http://tempuri.org/", className = "org.tempuri.ConfermaRiga")
+    @ResponseWrapper(localName = "ConfermaRigaResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.ConfermaRigaResponse")
+    public RisultatoConfermaRiga confermaRiga(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "idRigaUnivoca", targetNamespace = "http://tempuri.org/")
+        String idRigaUnivoca,
+        @WebParam(name = "disponibile", targetNamespace = "http://tempuri.org/")
+        Boolean disponibile);
+
+    /**
+     * 
+     * @param filtro
+     * @param datiClient
+     * @return
+     *     returns org.datacontract.schemas._2004._07.expert_loyalty_ws.RisultatoOttieniElencoOrdini
+     */
+    @WebMethod(operationName = "OttieniElencoOrdini", action = "http://tempuri.org/ILoyaltyIntegration/OttieniElencoOrdini")
+    @WebResult(name = "OttieniElencoOrdiniResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "OttieniElencoOrdini", targetNamespace = "http://tempuri.org/", className = "org.tempuri.OttieniElencoOrdini")
+    @ResponseWrapper(localName = "OttieniElencoOrdiniResponse", targetNamespace = "http://tempuri.org/", className = "org.tempuri.OttieniElencoOrdiniResponse")
+    public RisultatoOttieniElencoOrdini ottieniElencoOrdini(
+        @WebParam(name = "datiClient", targetNamespace = "http://tempuri.org/")
+        DatiClient datiClient,
+        @WebParam(name = "filtro", targetNamespace = "http://tempuri.org/")
+        FiltroElencoOrdini filtro);
 
 }

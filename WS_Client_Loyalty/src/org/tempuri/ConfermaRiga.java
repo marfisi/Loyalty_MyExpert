@@ -21,7 +21,8 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="datiClient" type="{http://schemas.datacontract.org/2004/07/Expert.Loyalty.WS.DTO}DatiClient" minOccurs="0"/>
- *         &lt;element name="codiceBuono" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="idRigaUnivoca" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="disponibile" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,15 +34,17 @@ import org.datacontract.schemas._2004._07.expert_loyalty_ws.DatiClient;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "datiClient",
-    "codiceBuono"
+    "idRigaUnivoca",
+    "disponibile"
 })
-@XmlRootElement(name = "VerificaBuono")
-public class VerificaBuono {
+@XmlRootElement(name = "ConfermaRiga")
+public class ConfermaRiga {
 
     @XmlElementRef(name = "datiClient", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
     protected JAXBElement<DatiClient> datiClient;
-    @XmlElementRef(name = "codiceBuono", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> codiceBuono;
+    @XmlElementRef(name = "idRigaUnivoca", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> idRigaUnivoca;
+    protected Boolean disponibile;
 
     /**
      * Recupera il valore della proprietà datiClient.
@@ -68,27 +71,51 @@ public class VerificaBuono {
     }
 
     /**
-     * Recupera il valore della proprietà codiceBuono.
+     * Recupera il valore della proprietà idRigaUnivoca.
      * 
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getCodiceBuono() {
-        return codiceBuono;
+    public JAXBElement<String> getIdRigaUnivoca() {
+        return idRigaUnivoca;
     }
 
     /**
-     * Imposta il valore della proprietà codiceBuono.
+     * Imposta il valore della proprietà idRigaUnivoca.
      * 
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setCodiceBuono(JAXBElement<String> value) {
-        this.codiceBuono = value;
+    public void setIdRigaUnivoca(JAXBElement<String> value) {
+        this.idRigaUnivoca = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà disponibile.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDisponibile() {
+        return disponibile;
+    }
+
+    /**
+     * Imposta il valore della proprietà disponibile.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDisponibile(Boolean value) {
+        this.disponibile = value;
     }
 
 }
