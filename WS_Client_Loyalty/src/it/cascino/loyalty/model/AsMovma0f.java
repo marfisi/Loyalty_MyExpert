@@ -13,7 +13,8 @@ import it.cascino.loyalty.model.pkey.AsMovma0fPKey;
 @NamedQueries({
 	@NamedQuery(name = "AsMovma0f.findAll", query = "SELECT a FROM Movma0f a"),
 	@NamedQuery(name = "AsMovma0f.findMovCassa", query = "SELECT a FROM Movma0f a WHERE a.id.vdatr = :vdatr and a.id.vcaus = :vcaus and a.id.vnura = :vnura and a.id.vnumd = :vnumd"),
-	@NamedQuery(name = "AsMovma0f.findMovCassaConRigo", query = "SELECT a FROM Movma0f a WHERE a.id.vdatr = :vdatr and a.id.vcaus = :vcaus and a.id.vnura = :vnura and a.id.vnumd = :vnumd and a.id.vprog = :vprog")
+	@NamedQuery(name = "AsMovma0f.findMovCassaConRigo", query = "SELECT a FROM Movma0f a WHERE a.id.vdatr = :vdatr and a.id.vcaus = :vcaus and a.id.vnura = :vnura and a.id.vnumd = :vnumd and a.id.vprog = :vprog"),
+	@NamedQuery(name = "AsMovma0f.findMovCassaConArticolo", query = "SELECT a FROM Movma0f a WHERE a.id.vdatr = :vdatr and a.id.vcaus = :vcaus and a.id.vnura = :vnura and a.id.vnumd = :vnumd and a.vcoda = :vcoda")
 })
 public class AsMovma0f implements Serializable{
 	private static final long serialVersionUID = 1L;

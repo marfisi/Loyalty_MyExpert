@@ -126,6 +126,27 @@ public class AsMovma0fDaoMng implements AsMovma0fDao, Serializable{
 		return cod;
 	}
 
+	public AsMovma0f getMovCassaConArticolo(Integer vdatr, String vcaus, Integer vnura, Integer vnumd, String vcoda){
+		AsMovma0f cod = null;
+		try{
+			try{
+				utx.begin();
+				Query query = em.createNamedQuery("AsMovma0f.findMovCassaConArticolo");
+				query.setParameter("vdatr", vdatr);
+				query.setParameter("vcaus", vcaus);
+				query.setParameter("vnura", vnura);
+				query.setParameter("vnumd", vnumd);
+				query.setParameter("vcoda", vcoda);
+				cod = (AsMovma0f)query.getSingleResult();
+			}catch(NoResultException e){
+				cod = null;
+			}
+			utx.commit();
+		}catch(Exception e){
+			log.fatal(e.toString());
+		}
+		return cod;
+	}
 	
 	public void close(){
 		res.close();

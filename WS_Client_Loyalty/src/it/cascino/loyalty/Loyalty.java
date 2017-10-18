@@ -120,6 +120,8 @@ public class Loyalty{
 	
 	Float totaleArticoliLoyalty = 0.0f;
 	
+	private Boolean acceleraDoppio = false; 
+	
 	public Loyalty(String args[]){
 		log.info("[" + "Loyalty");
 		
@@ -231,7 +233,7 @@ public class Loyalty{
 					
 					if(lymovLs.isEmpty()){
 						stringBuilder = new StringBuilder();
-						stringBuilder.append("nessuno scontrino da elaborare");
+						stringBuilder.append("nessuno scontrino da elaborare" + sepStatoRisposta + "nessuno scontrino da elaborare");
 						log.info(stringBuilder.toString());
 						scriviRispostaInDb(cmd);
 					}
@@ -270,6 +272,19 @@ public class Loyalty{
 						}
 						
 						totaleArticoliLoyalty = 0.0f;
+						
+						// determino se ha diritto al caricamento accelerato 
+						acceleraDoppio = false;
+						if(StringUtils.endsWith(lymov.getId().getLycau(), "9")){
+							AsMovma0f movma = new AsMovma0f();
+							movma = asMovma0fDao.getMovCassaConArticolo(lymov.getId().getLydat(), lymov.getId().getLycau(), lymov.getId().getLynuz(), lymov.getId().getLynum(), "/SCOKORE");
+							if(movma != null){
+								// controllo che ci sia la matricola di almeno 6 caratteri
+								if(StringUtils.substringAfterLast(movma.getVdesc(), ":").length() > 5){
+									acceleraDoppio = true;
+								}
+							}
+						}
 						scontrino = creaScontrino(lymov, idTransazione, StringUtils.split(lyprgScontrino, "-"));
 						caricamentoPunti(scontrino, lymov, cmd);
 						
@@ -868,16 +883,20 @@ public class Loyalty{
 		ArrayOfDettaglioScontrino arrayOfDettaglioScontrino = new ArrayOfDettaglioScontrino();
 		DettaglioScontrino dettaglioScontrino = null;
 		List<DettaglioScontrino> dettaglioScontrinoLs = new ArrayList<DettaglioScontrino>();
+		Integer percentualeAccelerazione = 0;
+		if(acceleraDoppio){
+			percentualeAccelerazione = 100;
+		}
 		for(int i = 0; i < righeScontrino.length; i++){
 			log.info("rigo scontrino: " + righeScontrino[i]);
-			dettaglioScontrino = creaDettaglioScontrino(lymov, righeScontrino[i], false);
+			dettaglioScontrino = creaDettaglioScontrino(lymov, righeScontrino[i], false, percentualeAccelerazione);
 			dettaglioScontrinoLs.add(i, dettaglioScontrino);
 		}
 		
 		// gestisco se ho usato piu' buoni di quanto ho speso come articoli loyalty, ed aggiungo un articolo fittizio che mi porta l'importo in positivo ma lo escludo dal calcolo punti
 		if(totaleArticoliLoyalty.compareTo(0.0f) <= 0) {
 			log.info("devo usare posArt - totaleArticoliLoyalty: " + totaleArticoliLoyalty );
-			dettaglioScontrino = creaDettaglioScontrino(lymov, posArt, true);
+			dettaglioScontrino = creaDettaglioScontrino(lymov, posArt, true, 0);
 			dettaglioScontrinoLs.add(righeScontrino.length, dettaglioScontrino);
 		}
 		arrayOfDettaglioScontrino.getDettaglioScontrino().addAll(dettaglioScontrinoLs);
@@ -885,7 +904,7 @@ public class Loyalty{
 		return arrayOfDettaglioScontrino;
 	}
 	
-	private DettaglioScontrino creaDettaglioScontrino(AsLymov0f lymov, String numRigoScontrino, Boolean escludiPunti){
+	private DettaglioScontrino creaDettaglioScontrino(AsLymov0f lymov, String numRigoScontrino, Boolean escludiPunti, Integer percentualeAccelerazione){
 		log.info("[" + "creaDettaglioScontrino");
 		
 		ObjectFactory factory = new ObjectFactory();
@@ -971,7 +990,7 @@ public class Loyalty{
 		JAXBElement<String> descrizioneProdotto = factory.createDettaglioScontrinoDescrizioneProdotto(movma.getVdesc() + "-" + movma.getVcoda());
 		dettaglioScontrino.setDescrizioneProdotto(descrizioneProdotto);
 		dettaglioScontrino.setEsclusioneCalcoloPunti(escludiPunti);
-		dettaglioScontrino.setPercentualeAccelerazioneLocale(0);
+		dettaglioScontrino.setPercentualeAccelerazioneLocale(percentualeAccelerazione);
 		
 		Float prezzoTot = movma.getVquan() * movma.getVprez();
 		prezzoTot = prezzoTot - (prezzoTot * movma.getVsco1() / 100.0f);

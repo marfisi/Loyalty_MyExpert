@@ -16,5 +16,7 @@ public interface AsMovma0fDao{
 
 	AsMovma0f getMovCassaConRigo(Integer vdatr, String vcaus, Integer vnura, Integer vnumd, Integer vprog);
 
+	AsMovma0f getMovCassaConArticolo(Integer vdatr, String vcaus, Integer vnura, Integer vnumd, String vcoda);
+
 	void close();
 }
