@@ -110,28 +110,28 @@ public class ElaboraFtp{
 			// values[0]; // e' il RS079
 			
 			// letti da file
-			a.setLypdv((StringUtils.isEmpty(StringUtils.trimToEmpty(values[1]))) ? "" : StringUtils.trimToEmpty(values[1]));
+			a.setLypdv((StringUtils.isEmpty(StringUtils.trimToEmpty(values[1]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[1], 50)));
 			try{
-				a.setLycli((StringUtils.isEmpty(StringUtils.trimToEmpty(values[2]))) ? 0 : Integer.parseInt(StringUtils.trimToEmpty(values[2])));
+				a.setLycli((StringUtils.isEmpty(StringUtils.trimToEmpty(values[2]))) ? 0 : Integer.parseInt(StringUtils.trimToEmpty(StringUtils.left(values[2], 5))));
 			}catch(NumberFormatException e){
 				a.setLycli(0);
 			}
-			a.setLyean((StringUtils.isEmpty(StringUtils.trimToEmpty(values[3]))) ? "" : StringUtils.trimToEmpty(values[3]));
-			a.setLynom((StringUtils.isEmpty(StringUtils.trimToEmpty(values[4]))) ? "" : StringUtils.trimToEmpty(values[4]));
-			a.setLycog((StringUtils.isEmpty(StringUtils.trimToEmpty(values[5]))) ? "" : StringUtils.trimToEmpty(values[5]));
-			a.setLydna(dataDD_MM_YYYYtoYYYYMMDD(StringUtils.trim(values[6])));
-			a.setLyind((StringUtils.isEmpty(StringUtils.trimToEmpty(values[7]))) ? "" : StringUtils.trimToEmpty(values[7]));
-			a.setLynci((StringUtils.isEmpty(StringUtils.trimToEmpty(values[8]))) ? "" : StringUtils.trimToEmpty(values[8]));
-			a.setLycap((StringUtils.isEmpty(StringUtils.trimToEmpty(values[9]))) ? 0 : Integer.parseInt(StringUtils.trimToEmpty(values[9])));
-			a.setLyloc(StringUtils.upperCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[10]))) ? "" : StringUtils.trimToEmpty(values[10])));
-			a.setLypro((StringUtils.isEmpty(StringUtils.trimToEmpty(values[11]))) ? "" : StringUtils.trimToEmpty(values[11]));
-			a.setLypry((StringUtils.isEmpty(StringUtils.trimToEmpty(values[12]))) ? "" : StringUtils.trimToEmpty(values[12]));
-			a.setLypun((StringUtils.isEmpty(StringUtils.trimToEmpty(values[13]))) ? 0 : Integer.parseInt(StringUtils.trimToEmpty(values[13])));
-			a.setLysta((StringUtils.isEmpty(StringUtils.trimToEmpty(values[14]))) ? "" : StringUtils.trimToEmpty(values[14]));
-			a.setLyste((StringUtils.isEmpty(StringUtils.trimToEmpty(values[15]))) ? "" : StringUtils.trimToEmpty(values[15]));
-			a.setLybuo((StringUtils.isEmpty(StringUtils.trimToEmpty(values[16]))) ? "" : StringUtils.trimToEmpty(values[16]));
-			a.setLymai(StringUtils.lowerCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[17]))) ? "" : StringUtils.trimToEmpty(values[17])) + StringUtils.trimToEmpty(values[18]));
-			a.setLytel(StringUtils.lowerCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[19]))) ? "" : StringUtils.trimToEmpty(values[19])) + StringUtils.trimToEmpty(values[20]));
+			a.setLyean((StringUtils.isEmpty(StringUtils.trimToEmpty(values[3]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[3], 13)));
+			a.setLynom((StringUtils.isEmpty(StringUtils.trimToEmpty(values[4]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[4], 50)));
+			a.setLycog((StringUtils.isEmpty(StringUtils.trimToEmpty(values[5]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[5], 50)));
+			a.setLydna(dataDD_MM_YYYYtoYYYYMMDD(StringUtils.trim(StringUtils.left(values[6], 10))));
+			a.setLyind((StringUtils.isEmpty(StringUtils.trimToEmpty(values[7]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[7], 50)));
+			a.setLynci((StringUtils.isEmpty(StringUtils.trimToEmpty(values[8]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[8], 10)));
+			a.setLycap((StringUtils.isEmpty(StringUtils.trimToEmpty(values[9]))) ? 0 : Integer.parseInt(StringUtils.trimToEmpty(StringUtils.left(values[9], 5))));
+			a.setLyloc(StringUtils.upperCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[10]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[10], 50))));
+			a.setLypro((StringUtils.isEmpty(StringUtils.trimToEmpty(values[11]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[11], 2)));
+			a.setLypry((StringUtils.isEmpty(StringUtils.trimToEmpty(values[12]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[12], 10)));
+			a.setLypun((StringUtils.isEmpty(StringUtils.trimToEmpty(values[13]))) ? 0 : Integer.parseInt(StringUtils.trimToEmpty(StringUtils.left(values[13], 5))));
+			a.setLysta((StringUtils.isEmpty(StringUtils.trimToEmpty(values[14]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[14], 20)));
+			a.setLyste((StringUtils.isEmpty(StringUtils.trimToEmpty(values[15]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[15], 256)));
+			a.setLybuo((StringUtils.isEmpty(StringUtils.trimToEmpty(values[16]))) ? "" : StringUtils.trimToEmpty(StringUtils.left(values[16], 10)));
+			a.setLymai(StringUtils.left(StringUtils.lowerCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[17]))) ? "" : StringUtils.trimToEmpty(values[17])) + StringUtils.trimToEmpty(values[18]), 100));
+			a.setLytel(StringUtils.left(StringUtils.lowerCase((StringUtils.isEmpty(StringUtils.trimToEmpty(values[19]))) ? "" : StringUtils.trimToEmpty(values[19])) + StringUtils.trimToEmpty(values[20]), 20));
 			
 			// tutti i dati seguenti sono gia' aggiornati da alessandra e agostino
 //			a.setLyses("M");

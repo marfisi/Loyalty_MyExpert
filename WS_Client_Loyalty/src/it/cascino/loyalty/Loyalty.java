@@ -221,8 +221,7 @@ public class Loyalty{
 					}else if(args[numArg].compareTo("-ms") == 0) {
 						numArg++;
 						frequenza = Integer.parseInt(args[numArg]);
-					}
-					{ // se c'e' almeno un parametro e non e' tra quelli previsti stampo il messaggio d'aiuto
+					}else{ // se c'e' almeno un parametro e non e' tra quelli previsti stampo il messaggio d'aiuto
 					}
 				}
 				creaDatiClient();
@@ -459,13 +458,19 @@ public class Loyalty{
 	}
 	
 	private void scriviRispostaInDb(AsLycmd0f cmd){
+		log.info("[" + "scriviRispostaInDb");
 		String risp = stringBuilder.substring(0, stringBuilder.indexOf(sepStatoRisposta));
 		risp = risp + "|";
 		String statoRisposta = stringBuilder.substring(stringBuilder.indexOf(sepStatoRisposta) + 1);		
+		statoRisposta = StringUtils.left(statoRisposta, 256);
 		
 		String rispostaSplit[] = risp.split("(?<=\\G.{256})");
-		String risposta[] = {"", "", "", "", "", "", "", ""};
-		for(int i = 0; i < rispostaSplit.length; i++){
+		String risposta[] = {"", "", "", "", "", "", ""};
+		int rispLen = rispostaSplit.length;
+		if(rispLen > 7){
+			rispLen = 7;
+		}
+		for(int i = 0; i < rispLen; i++){
 			risposta[i] = rispostaSplit[i];
 		}
 		cmd.setLyris1(risposta[0]);
@@ -478,6 +483,7 @@ public class Loyalty{
 		
 		cmd.setLyris8(statoRisposta);
 		asLycmd0fDao.updateRis(cmd);
+		log.info("]" + "scriviRispostaInDb");
 	}
 	
 	private VerificaCodice creaVerificaCodice(String codiceCard, String caratteriControllo, String posizioniControllo){
