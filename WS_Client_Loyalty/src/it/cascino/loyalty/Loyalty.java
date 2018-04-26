@@ -172,7 +172,7 @@ public class Loyalty{
 				cmd = iter_cmd.next();
 				log.info("Comando: " + cmd.toString());
 				
-				argomenti = cmd.getId().getLycmd1() + " " + cmd.getId().getLycmd2() + " " + cmd.getId().getLycmd3();
+				argomenti = cmd.getId().getLycmd1();	//  + " " + cmd.getId().getLycmd2() + " " + cmd.getId().getLycmd3();
 				argomenti = StringUtils.normalizeSpace(argomenti);
 				// for(int numArg = 0; numArg < args.length; numArg++){
 				// argomenti += args[numArg] + " " ;
@@ -465,21 +465,23 @@ public class Loyalty{
 		statoRisposta = StringUtils.left(statoRisposta, 256);
 		
 		String rispostaSplit[] = risp.split("(?<=\\G.{256})");
-		String risposta[] = {"", "", "", "", "", "", ""};
-		int rispLen = rispostaSplit.length;
-		if(rispLen > 7){
-			rispLen = 7;
-		}
-		for(int i = 0; i < rispLen; i++){
-			risposta[i] = rispostaSplit[i];
-		}
-		cmd.setLyris1(risposta[0]);
-		cmd.setLyris2(risposta[1]);
-		cmd.setLyris3(risposta[2]);
-		cmd.setLyris4(risposta[3]);
-		cmd.setLyris5(risposta[4]);
-		cmd.setLyris6(risposta[5]);
-		cmd.setLyris7(risposta[6]);
+//		String risposta[] = {"", "", "", "", "", "", ""};
+//		int rispLen = rispostaSplit.length;
+//		if(rispLen > 7){
+//			rispLen = 7;
+//		}
+//		for(int i = 0; i < rispLen; i++){
+//			risposta[i] = rispostaSplit[i];
+//		}
+//		cmd.setLyris1(risposta[0]);
+//		cmd.setLyris2(risposta[1]);
+//		cmd.setLyris3(risposta[2]);
+//		cmd.setLyris4(risposta[3]);
+//		cmd.setLyris5(risposta[4]);
+//		cmd.setLyris6(risposta[5]);
+//		cmd.setLyris7(risposta[6]);
+		
+		cmd.setLyris1(rispostaSplit[0]);
 		
 		cmd.setLyris8(statoRisposta);
 		asLycmd0fDao.updateRis(cmd);

@@ -19,6 +19,8 @@ public class AsLymov0fDaoMng implements AsLymov0fDao, Serializable{
 	
 	Logger log = Logger.getLogger(AsLymov0fDaoMng.class);
 	
+	private final String lytip = "MX";
+	
 	@SuppressWarnings("unchecked")
 	public List<AsLymov0f> getAll(){
 		List<AsLymov0f> cod = null;
@@ -26,6 +28,7 @@ public class AsLymov0fDaoMng implements AsLymov0fDao, Serializable{
 			try{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLymov0f.findAll");
+				query.setParameter("lytip", lytip);
 				cod = (List<AsLymov0f>)query.getResultList();
 			}catch(NoResultException e){
 				cod = null;
@@ -90,6 +93,7 @@ public class AsLymov0fDaoMng implements AsLymov0fDao, Serializable{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLymov0f.findToElab");
 				query.setParameter("lysta", "0");
+				query.setParameter("lytip", lytip);
 				cod = (List<AsLymov0f>)query.getResultList();
 			}catch(NoResultException e){
 				cod = null;
@@ -113,6 +117,7 @@ public class AsLymov0fDaoMng implements AsLymov0fDao, Serializable{
 				query.setParameter("lycau",  lymov.getId().getLycau());
 				query.setParameter("lynuz",  lymov.getId().getLynuz());
 				query.setParameter("lynum",  lymov.getId().getLynum());
+				query.setParameter("lytip", lytip);
 				cod = query.executeUpdate();
 			}catch(NoResultException e){
 				cod = -1;

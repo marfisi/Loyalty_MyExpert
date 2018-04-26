@@ -19,6 +19,8 @@ public class AsLycmd0fDaoMng implements AsLycmd0fDao, Serializable{
 	
 	Logger log = Logger.getLogger(AsLycmd0fDaoMng.class);
 	
+	private final String lytip = "MX";
+	
 	@SuppressWarnings("unchecked")
 	public List<AsLycmd0f> getAll(){
 		List<AsLycmd0f> c = null;
@@ -26,6 +28,7 @@ public class AsLycmd0fDaoMng implements AsLycmd0fDao, Serializable{
 			try{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLycmd0f.findAll");
+				query.setParameter("lytip", lytip);
 				c = (List<AsLycmd0f>)query.getResultList();
 			}catch(NoResultException e){
 				c = null;
@@ -89,6 +92,7 @@ public class AsLycmd0fDaoMng implements AsLycmd0fDao, Serializable{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLycmd0f.findByLycass");
 				query.setParameter("lycass", lycass);
+				query.setParameter("lytip", lytip);
 				c = (List<AsLycmd0f>)query.getResultList();
 			}catch(NoResultException e){
 				c = null;
@@ -107,6 +111,7 @@ public class AsLycmd0fDaoMng implements AsLycmd0fDao, Serializable{
 			try{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLycmd0f.findByToDo");
+				query.setParameter("lytip", lytip);
 				c = (List<AsLycmd0f>)query.getResultList();
 			}catch(NoResultException e){
 				c = null;
@@ -126,17 +131,10 @@ public class AsLycmd0fDaoMng implements AsLycmd0fDao, Serializable{
 				Query query = em.createNamedQuery("AsLycmd0f.updateRis");
 				query.setParameter("lycass", cmd.getId().getLycass());
 				query.setParameter("lycmd1", cmd.getId().getLycmd1());
-				query.setParameter("lycmd2", cmd.getId().getLycmd2());
-				query.setParameter("lycmd3", cmd.getId().getLycmd3());
 				query.setParameter("lyris1", cmd.getLyris1());
-				query.setParameter("lyris2", cmd.getLyris2());
-				query.setParameter("lyris3", cmd.getLyris3());
-				query.setParameter("lyris4", cmd.getLyris4());
-				query.setParameter("lyris5", cmd.getLyris5());
-				query.setParameter("lyris6", cmd.getLyris6());
-				query.setParameter("lyris7", cmd.getLyris7());
 				query.setParameter("lyris8", cmd.getLyris8());
 				query.setParameter("lyidtr", cmd.getId().getLyidtr());
+				query.setParameter("lytip", lytip);
 				c = query.executeUpdate();
 			}catch(NoResultException e){
 				c = -1;

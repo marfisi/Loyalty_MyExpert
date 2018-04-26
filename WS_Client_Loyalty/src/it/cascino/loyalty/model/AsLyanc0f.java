@@ -10,11 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 */
 @Entity(name = "Lyanc0f")
 @NamedQueries({
-	@NamedQuery(name = "AsLyanc0f.findAll", query = "SELECT a FROM Lyanc0f a"),
-	@NamedQuery(name = "AsLyanc0f.findByLyean", query = "SELECT a FROM Lyanc0f a WHERE a.lyean = :lyean"),
-	@NamedQuery(name = "AsLyanc0f.findByLycli", query = "SELECT a FROM Lyanc0f a WHERE a.lycli = :lycli and a.lycli != 0"),
-	@NamedQuery(name = "AsLyanc0f.findByCognNom", query = "SELECT a FROM Lyanc0f a WHERE a.lycog = :lycog and a.lynom = :lynom"),
-	@NamedQuery(name = "AsLyanc0f.updateAnagrafica", query = "UPDATE Lyanc0f a SET a.lypdv = :lypdv, a.lyean = :lyean, a.lynom = :lynom, a.lycog = :lycog, a.lydna = :lydna, a.lyind = :lyind, a.lynci = :lynci, a.lycap = :lycap, a.lyloc = :lyloc, a.lypro = :lypro, a.lypry = :lypry, a.lypun = :lypun, a.lysta = :lysta, a.lyste = :lyste, a.lybuo = :lybuo, a.lydup = :lydup WHERE (a.lycli = :lycli and a.lycli != 0) or a.lyean = :lyean")
+	@NamedQuery(name = "AsLyanc0f.findAll", query = "SELECT a FROM Lyanc0f a WHERE a.lytip = :lytip"),
+	@NamedQuery(name = "AsLyanc0f.findByLyean", query = "SELECT a FROM Lyanc0f a WHERE a.lyean = :lyean and a.lytip = :lytip"),
+	@NamedQuery(name = "AsLyanc0f.findByLycli", query = "SELECT a FROM Lyanc0f a WHERE a.lycli = :lycli and a.lycli != 0 and a.lytip = :lytip"),
+	@NamedQuery(name = "AsLyanc0f.findByCognNom", query = "SELECT a FROM Lyanc0f a WHERE a.lycog = :lycog and a.lynom = :lynom and a.lytip = :lytip"),
+	@NamedQuery(name = "AsLyanc0f.updateAnagrafica", query = "UPDATE Lyanc0f a SET a.lypdv = :lypdv, a.lyean = :lyean, a.lynom = :lynom, a.lycog = :lycog, a.lydna = :lydna, a.lyind = :lyind, a.lynci = :lynci, a.lycap = :lycap, a.lyloc = :lyloc, a.lypro = :lypro, a.lypry = :lypry, a.lypun = :lypun, a.lysta = :lysta, a.lyste = :lyste, a.lybuo = :lybuo, a.lydup = :lydup WHERE ((a.lycli = :lycli and a.lycli != 0) or a.lyean = :lyean) and a.lytip = :lytip")
 })
 public class AsLyanc0f implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -53,11 +53,12 @@ public class AsLyanc0f implements Serializable{
 	private Float lyimo;
 	private Integer lynal;
 	private Integer lytar;
+	private String lytip;
 	
 	public AsLyanc0f(){
 	}
 	
-	public AsLyanc0f(String lypdv, Integer lycli, String lyean, String lynom, String lycog, String lyses, String lycfp, Integer lydna, String lyind, String lynci, Integer lycap, String lyloc, String lypro, String lypry, Integer lypun, String lysta, String lyste, String lybuo, Integer lydcr, Integer lydup, Integer lyduv, String lymai, String lytel, Integer lyvis, Float lytsp, Float lyimo, Integer lynal, Integer lytar){
+	public AsLyanc0f(String lypdv, Integer lycli, String lyean, String lynom, String lycog, String lyses, String lycfp, Integer lydna, String lyind, String lynci, Integer lycap, String lyloc, String lypro, String lypry, Integer lypun, String lysta, String lyste, String lybuo, Integer lydcr, Integer lydup, Integer lyduv, String lymai, String lytel, Integer lyvis, Float lytsp, Float lyimo, Integer lynal, Integer lytar, String lytip){
 		super();
 		this.lypdv = lypdv;
 		this.lycli = lycli;
@@ -87,6 +88,7 @@ public class AsLyanc0f implements Serializable{
 		this.lyimo = lyimo;
 		this.lynal = lynal;
 		this.lytar = lytar;
+		this.lytip = lytip;
 	}
 	
 	public String getLypdv(){
@@ -314,6 +316,14 @@ public class AsLyanc0f implements Serializable{
 		this.lytar = lytar;
 	}
 	
+	public String getLytip(){
+		return lytip;
+	}
+	
+	public void setLytip(String lytip){
+		this.lytip = lytip;
+	}
+	
 	@Override
 	public boolean equals(Object obj){
 		if(obj instanceof AsLyanc0f) {
@@ -358,6 +368,7 @@ public class AsLyanc0f implements Serializable{
 		result = prime * result + ((lytel == null) ? 0 : lytel.hashCode());
 		result = prime * result + ((lytsp == null) ? 0 : lytsp.hashCode());
 		result = prime * result + ((lyvis == null) ? 0 : lyvis.hashCode());
+		result = prime * result + ((lytip == null) ? 0 : lytip.hashCode());
 		return result;
 	}
 	
@@ -393,7 +404,8 @@ public class AsLyanc0f implements Serializable{
 		stringBuilder.append("lytsp=" + lytsp).append(", ");
 		stringBuilder.append("lyimo=" + lyimo).append(", ");
 		stringBuilder.append("lynal=" + lynal).append(", ");
-		stringBuilder.append("lytar=" + lytar);
+		stringBuilder.append("lytar=" + lytar).append(", ");
+		stringBuilder.append("lytip=" + lytip);
 		stringBuilder.append("]");
 		return stringBuilder.toString();
 	}

@@ -19,6 +19,8 @@ public class AsLyanc0fDaoMng implements AsLyanc0fDao, Serializable{
 	
 	Logger log = Logger.getLogger(AsLyanc0fDaoMng.class);
 	
+	private final String lytip = "MX";
+	
 	@SuppressWarnings("unchecked")
 	public List<AsLyanc0f> getAll(){
 		List<AsLyanc0f> a = null;
@@ -26,6 +28,7 @@ public class AsLyanc0fDaoMng implements AsLyanc0fDao, Serializable{
 			try{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLyanc0f.findAll");
+				query.setParameter("lytip", lytip);
 				a = (List<AsLyanc0f>)query.getResultList();
 			}catch(NoResultException e){
 				a = null;
@@ -89,6 +92,7 @@ public class AsLyanc0fDaoMng implements AsLyanc0fDao, Serializable{
 				em.clear();
 				Query query = em.createNamedQuery("AsLyanc0f.findByLyean");
 				query.setParameter("lyean", lyean);
+				query.setParameter("lytip", lytip);
 //				a = (AsLyanc0f)query.getSingleResult();
 				a = (AsLyanc0f)query.getResultList().get(0);
 			}catch(NoResultException e){
@@ -110,6 +114,7 @@ public class AsLyanc0fDaoMng implements AsLyanc0fDao, Serializable{
 				utx.begin();
 				Query query = em.createNamedQuery("AsLyanc0f.findByLycli");
 				query.setParameter("lycli", lycli);
+				query.setParameter("lytip", lytip);
 //				a = (AsLyanc0f)query.getSingleResult();
 				a = (AsLyanc0f)query.getResultList().get(0);
 			}catch(NoResultException e){
@@ -133,6 +138,7 @@ public class AsLyanc0fDaoMng implements AsLyanc0fDao, Serializable{
 				Query query = em.createNamedQuery("AsLyanc0f.findByCognNom");
 				query.setParameter("lycog", cogn);
 				query.setParameter("lynom", nome);
+				query.setParameter("lytip", lytip);
 				a = (List<AsLyanc0f>)query.getResultList();
 			}catch(NoResultException e){
 				a = null;
@@ -167,6 +173,7 @@ public class AsLyanc0fDaoMng implements AsLyanc0fDao, Serializable{
 				query.setParameter("lyste", a.getLyste());
 				query.setParameter("lybuo", a.getLybuo());
 				query.setParameter("lydup", a.getLydup());
+				query.setParameter("lytip", lytip);
 				c = query.executeUpdate();
 			}catch(NoResultException e){
 				c = -1;

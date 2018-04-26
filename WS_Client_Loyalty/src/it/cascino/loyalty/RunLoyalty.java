@@ -7,7 +7,7 @@ public class RunLoyalty{
 	private static Logger log;
 	
 	public static void main(String[] args){
-		PropertyConfigurator.configure("logdir/logLoyalty.properties");
+		PropertyConfigurator.configure("logdir/log.properties");
 		log = Logger.getLogger(RunLoyalty.class);
 		log.info("START");
 		
